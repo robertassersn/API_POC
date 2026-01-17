@@ -9,6 +9,7 @@ from psycopg2 import OperationalError
 from datetime import date, timedelta,datetime
 from dateutil.relativedelta import relativedelta
 import re 
+import shutil
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../'
@@ -177,6 +178,35 @@ def save_as_json(data, filepath):
     """Save timeline data as JSON."""
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
+
+def delete_files_from_directory(files_path):
+    for item in os.listdir(files_path):
+        item_path = os.path.join(files_path, item)
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path) # remove subdirectories
+        else: 
+            os.remove(item_path)
+
+def archive_files(
+        files_path
+        ,archived_files_path
+        ,archived_file_prefix
+    ):
+    current_timestamp = get_current_timestamp()
+    archived_file_name = f'{archived_files_path}/{archived_file_prefix}_{current_timestamp}'
+    shutil.make_archive(archived_file_name,'zip',files_path)
+
+def archive_files_and_cleanup(
+        files_path
+        ,archived_files_path
+        ,archived_file_prefix
+    ):
+    archive_files(
+        files_path
+        ,archived_files_path
+        ,archived_file_prefix
+    )
+    delete_files_from_directory(files_path)
 
 def load_execution_plan(job_name, data_source,connection):
     """

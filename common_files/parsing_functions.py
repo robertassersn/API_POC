@@ -3,6 +3,9 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+def return_parquet_schema(directory,file_name):
+    schema = pq.read_schema(f"{directory}/{file_name}.parquet")
+    return schema
 
 class JsonToParquetConverter:
     """Convert complex nested JSON to multiple Parquet files with configurable naming."""

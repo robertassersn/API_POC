@@ -44,7 +44,7 @@ def construct_search_params():
     try:
         params = {
             "engine": "google_trends"
-            ,"q": config_dictionary['SEARCH_PARAMETER_LIST'] # bad practice to hold this in config, better to pass from DB and have each value in separate row. Have e.g job_parameters table
+            ,"q": config_dictionary['SEARCH_PARAMETER_LIST'] # bad practice to hold this in config, better to pass from DB and have each value in separate row.
             ,"date": construct_date_range()
             ,"geo": config_dictionary['COUNTRY']
             ,"api_key": config_dictionary['API_KEY']
@@ -54,7 +54,7 @@ def construct_search_params():
         raise(f'construct_search_params function failed:\n ERROR: {e}')
     return params 
 
-def make_api_request(max_retries=3, initial_delay=2):
+def make_api_request(max_retries=3, initial_delay=10):
     params = construct_search_params()
     
     retryable_exceptions = (
@@ -95,8 +95,8 @@ filename_pattern = 'google_trends.*\\.json'
 def parse_downloaded_files():
     converter = parsing_functions.JsonToParquetConverter(
         root_table_name='google_trends'
-        ,foreign_key_suffix='_fk'
-        ,index_column='_id'
+        ,foreign_key_suffix=''
+        ,index_column='google_trends_id'
         ,child_separator='__'
     )
     try:
@@ -118,3 +118,9 @@ def parse_downloaded_files():
     
 
 parse_downloaded_files()
+
+schema = parsing_functions.return_parquet_schema(
+    directory=config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES']
+    ,file_name = 'google_trends__values'
+    )
+print(f'PARQUET SCHEMA:\n {schema}')
