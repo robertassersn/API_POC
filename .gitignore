@@ -1,0 +1,8 @@
+# Ignore contents but keep directory (add empty .gitkeep inside)
+/files/downloaded_files/*
+/files/parsed_files/*
+/files/archived_files/*
+!/files/.gitkeep
+!/files/downloaded_files/.gitkeep
+!/files/parsed_files/.gitkeep
+!/files/archived_files/.gitkeep
