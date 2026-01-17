@@ -10,6 +10,7 @@ from datetime import date, timedelta,datetime
 from dateutil.relativedelta import relativedelta
 import re 
 import shutil
+import argparse
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../'
@@ -191,7 +192,7 @@ def archive_files(
         files_path
         ,archived_files_path
         ,archived_file_prefix
-    ):
+    ): 
     current_timestamp = get_current_timestamp()
     archived_file_name = f'{archived_files_path}/{archived_file_prefix}_{current_timestamp}'
     shutil.make_archive(archived_file_name,'zip',files_path)
@@ -207,6 +208,21 @@ def archive_files_and_cleanup(
         ,archived_file_prefix
     )
     delete_files_from_directory(files_path)
+
+def get_cli_args(defaults = None):
+    parser = argparse.ArgumentParser()
+    args,unknown = parser.parse_known_args()
+
+    arg_dict = {}
+    for i in range(0,len(unknown) ,2):
+        key = unknown[i].lstrip('-')
+        if i + 1 < len(unknown):
+            arg_dict[key] = unknown[i + 1]
+    if defaults:
+        for key, value in defaults.items():
+            arg_dict.setdefault(key,value)
+
+    return arg_dict
 
 def load_execution_plan(job_name, data_source,connection):
     """
@@ -257,13 +273,16 @@ def sql_replace_parameters(path_to_sql, params):
         executable_sql = string_replace_parameters( executable_sql,params)
     return executable_sql
 
-def sql_function(path_to_sql,filename,params,JOB_NAME,DATA_SOURCE,vertica_conn,job_run_id,execution_step):
+def sql_function(
+        path_to_sql
+        ,filename
+        ,params
+        ,JOB_NAME
+        ,DATA_SOURCE
+        ,dwh_conn
+        ):
     executable_sql = sql_replace_parameters(path_to_sql, params)
     sqlCommands = executable_sql.split(';')
-    reference_link=execution_step['reference_link']
-    msg_type=execution_step['msg_type']
-    step_name = execution_step['step_name']
-    audit_log_flag = execution_step['audit_log_flag']
     conn_info = get_db_connection_params('vertica_dwh')
     with get_connection(conn_info) as conn:
         with conn.cursor() as cur:

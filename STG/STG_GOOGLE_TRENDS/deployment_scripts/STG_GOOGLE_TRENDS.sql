@@ -33,6 +33,8 @@ create table job_info.job_variables(
 );
 create table job_info.job_runs(
 	job_run_id int default nextval('job_info.seq_job_run_id')
+    ,airflow_dag_id varchar(30)
+    ,airflow_dag_run_id varchar(30)
 	,job_name varchar(60) not null
 	,datasource varchar(60) not null
 	,start_timestamp timestamp not null
