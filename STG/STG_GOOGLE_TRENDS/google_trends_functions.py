@@ -214,9 +214,9 @@ def cleanup_files():
     
 
 def insert_into_temp():
-    # download_data_from_api()
+    download_data_from_api()
     parse_downloaded_files()
     load_parquets_into_temp_table()
-    # cleanup_files()
+    cleanup_files()
 
 
