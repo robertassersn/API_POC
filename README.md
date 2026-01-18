@@ -2,6 +2,7 @@
 ### PREREQUISITES
 - necessary python packages provided in requirements.txt file
 - in order to use PARAMETERS, MAIN_CONFIG_FILE variable value needs to be filled in .env file
+- airflow-docker/docker-compose.yml must provide within "x-airflow-common:" block following "volume"  "- ../:/opt/airflow/project"
 
 ### PROJECT NOTES
 - To have functional reusability, project has "project_files" directory currently containing 2 python files that contain functions dedicated to specific area of work
