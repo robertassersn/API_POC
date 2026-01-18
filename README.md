@@ -18,7 +18,8 @@
 - in order to monitor job runs from database side "job_runs" table was created, its granularity is based on job run, does not have individual steps tracking at the moment.
   - postgresql SEQUENCES are used to identify individual job runs
     - following sequences are inserted into tables during insert from "temp" schema into "main" schema   
-  - runs can have following statuses [STARTED,FINISHED,FAILED]    
+  - runs can have following statuses [STARTED,FINISHED,FAILED]
+- api returns some of key values as sql database keywords, decided to keep matching columns names to the json file, it creates requirement to add doublequotes when query'ing columns. 
 
 ### Model details
 
