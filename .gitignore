@@ -13,7 +13,7 @@ files/archived_files/*
 
 # Airflow Docker
 airflow-docker/*
-!airflow-docker/dags/
+!airflow-docker/dags/.gitkeep
 !airflow-docker/docker-compose.yml
 
 # Logs - MUST be after airflow exceptions to override them
