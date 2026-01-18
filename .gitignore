@@ -9,6 +9,8 @@ files/archived_files/*
 
 # Logs
 Logs/*
+**/Logs/
+**/logs/
 !Logs/.gitkeep
 
 # Python
@@ -20,6 +22,7 @@ airflow-docker/*
 !airflow-docker/dags/
 !airflow-docker/docker-compose.yml
 !airflow-docker/.gitkeep
-airflow-docker/logs/
+airflow-docker/logs/*
 airflow-docker/config/
 airflow-docker/plugins/
+
