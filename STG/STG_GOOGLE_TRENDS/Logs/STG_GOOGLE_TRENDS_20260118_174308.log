@@ -1,0 +1,21 @@
+[2026-01-18 17:43:08,006] INFO [project_files.functions:458] STARTED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\STG_GOOGLE_TRENDS.py
+[2026-01-18 17:43:08,036] INFO [project_files.functions:320] STARTED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\start_job_run.sql
+[2026-01-18 17:43:08,037] INFO [project_files.functions:324] COMPLETED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\start_job_run.sql
+[2026-01-18 17:43:08,037] INFO [google_trends_functions:117] STARTED parse_downloaded_files function
+[2026-01-18 17:43:08,037] INFO [google_trends_functions:139] Files matching search pattern: ['C:\\Users\\sersn\\Documents\\GitHub\\google_trends_to_postgres\\files\\downloaded_files\\google_trends\\google_trends_20260117102117.json']
+[2026-01-18 17:43:08,050] INFO [google_trends_functions:151] PARSING FILE: C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\files\downloaded_files\google_trends\google_trends_20260117102117.json
+[2026-01-18 17:43:08,057] INFO [google_trends_functions:158] COMPLETED parse_downloaded_files function
+[2026-01-18 17:43:08,057] INFO [project_files.functions:475] TRUNCATING TABLE google_trends_temp.trends_search_temp
+[2026-01-18 17:43:08,474] INFO [project_files.functions:422] Loaded 181 rows into google_trends_temp.trends_search_temp
+[2026-01-18 17:43:08,475] INFO [project_files.functions:475] TRUNCATING TABLE google_trends_temp.trends_search__values_temp
+[2026-01-18 17:43:08,552] INFO [project_files.functions:422] Loaded 724 rows into google_trends_temp.trends_search__values_temp
+[2026-01-18 17:43:08,582] INFO [project_files.functions:352] C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\validation_trends_search_temp.sql VERIFICATION PASSED
+[2026-01-18 17:43:08,613] INFO [project_files.functions:352] C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\validation_trends_search__values_temp.sql VERIFICATION PASSED
+[2026-01-18 17:43:08,638] INFO [project_files.functions:320] STARTED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\trends_search_insert_to_main.sql
+[2026-01-18 17:43:08,641] INFO [project_files.functions:324] COMPLETED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\trends_search_insert_to_main.sql
+[2026-01-18 17:43:08,673] INFO [project_files.functions:320] STARTED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\trends_search__values_insert_to_main.sql
+[2026-01-18 17:43:08,677] INFO [project_files.functions:324] COMPLETED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\trends_search__values_insert_to_main.sql
+[2026-01-18 17:43:08,677] INFO [__main__:78] JOB_RUN_ID,17
+[2026-01-18 17:43:08,704] INFO [project_files.functions:320] STARTED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run.sql
+[2026-01-18 17:43:08,706] INFO [project_files.functions:324] COMPLETED:C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run.sql
+[2026-01-18 17:43:08,706] INFO [root:461] JOB COMPLETED
