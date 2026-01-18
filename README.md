@@ -57,6 +57,8 @@ PERSONAL
 - current parquet parser, needs much improvement. It definately will not handle all possible schema types. I've personally spent more time parsing data into CSV due to business requirements. Which is fine if you have control over output file content and column positioning
 - so far have been doing majority of testing inside of database rather than outside.
 - Not using python's decorators, they can be very helpful in error/warning handling to reduce script length
+
+  --------------------------------------------------------------------------------------------------------------
 JOB
 - current provided API solution can search 5 terms at a time, task requested for 4 terms, however job needs to be modified to handle larger lists of terms, possibly from 1 large list, generate string of 5 terms and iterate.
 -  Can add functionality so send email or notification in case of ERROR or WARNING.
@@ -68,4 +70,3 @@ JOB
 -  Airflow metadata can be passed via flags to the script and database
 -  sql scripts e.g start_log.sql,end_log.sql, end_log_error.sql must be called from Python functions. That accept necessary parameters and job specific details.
 -  Need to add and integrate function for old .log file deletion
--  
