@@ -19,7 +19,8 @@
   - postgresql SEQUENCES are used to identify individual job runs
     - following sequences are inserted into tables during insert from "temp" schema into "main" schema   
   - runs can have following statuses [STARTED,FINISHED,FAILED]
-- api returns some of key values as sql database keywords, decided to keep matching columns names to the json file, it creates requirement to add doublequotes when query'ing columns. 
+- api returns some of key values as sql database keywords, decided to keep matching columns names to the json file, it creates requirement to add doublequotes when query'ing columns.
+  - suffixes can be added to such columns, however such agreement has to be documented  
 
 ### Model details
 
