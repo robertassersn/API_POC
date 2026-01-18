@@ -12,7 +12,7 @@ CREATE SEQUENCE job_info.seq_job_variables_id
     MINVALUE 1
     MAXVALUE 9223372036854775807
     NO CYCLE
-    CACHE 1000
+    CACHE 1
 ;
 CREATE SEQUENCE job_info.seq_job_run_id
     START WITH 1
@@ -20,7 +20,7 @@ CREATE SEQUENCE job_info.seq_job_run_id
     MINVALUE 1
     MAXVALUE 9223372036854775807
     NO CYCLE
-    CACHE 1000
+    CACHE 1
 ;
     
 create table job_info.job_variables(
@@ -55,6 +55,7 @@ create table google_trends_temp.trends_search_temp
 	google_trends_id int
 	,date varchar(30)
 	,timestamp bigint
+	,source_file_name
 	)
 ;
 
@@ -64,28 +65,31 @@ create table google_trends_temp.trends_search__values_temp(
 	 ,extracted_value int
 	 ,google_trends int
 	 ,google_trends_id int
+	 ,source_file_name
+	)
+;
 
+create table google_trends.trends_search
+	(
+	google_trends_id int
+	,date varchar(30)
+	,timestamp bigint
+	,source_file_name
+	,job_run_id
+	)
+;
+
+create table google_trends.trends_search__values(
+	 query varchar(300)
+	 ,value varchar(300)
+	 ,extracted_value int
+	 ,google_trends int
+	 ,google_trends_id int
+	 ,source_file_name
+	 ,job_run_id
 	)
 ;
 /*
 GRANT SELECT ...... ON TABLE TO
 */
 
-/*
-██████   █████  ██████   █████  ███    ███ ███████ 
-██   ██ ██   ██ ██   ██ ██   ██ ████  ████ ██      
-██████  ███████ ██████  ███████ ██ ████ ██ ███████ 
-██      ██   ██ ██   ██ ██   ██ ██  ██  ██      ██ 
-██      ██   ██ ██   ██ ██   ██ ██      ██ ███████                                                                                          
-*/
-insert into job_info.job_variables(
-	job_name 
-	,datasource 
-	,variable_name 
-	,variable_value
-) values(
-    'STG_GOOGLE_TRENDS'
-    ,'GOOGLE'
-    ,'LAST_SUCCESSFUL_RUN_DATE'
-    ,null
-) 

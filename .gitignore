@@ -8,3 +8,4 @@
 !/files/archived_files/.gitkeep
 !/Logs/*
 !/Logs/.gitkeep
+!/__pycache__

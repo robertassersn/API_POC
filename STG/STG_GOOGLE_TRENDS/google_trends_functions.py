@@ -5,7 +5,14 @@ import time
 import requests
 import logging
 logger = logging.getLogger(__name__)
-
+job_config = {
+    "JOB_NAME": "STG_GOOGLE_TRENDS"
+    ,"DATA_SOURCE": "GOOGLE"
+    ,"FILE_DIRECTORY": os.path.dirname(os.path.abspath(__file__))
+    ,"FILE_NAME": os.path.basename(__file__)
+    ,"JOB_LAYER": 'STG'
+}
+json_schema_path = os.path.join(job_config['FILE_DIRECTORY'], 'schema.json') 
 '''
 -----------------------
 NOTES
@@ -25,7 +32,7 @@ base_path = os.path.abspath(
         )
     )
 sys.path.append(base_path)
-from common_files import functions,parsing_functions
+from project_files import functions,parsing_functions
 config_dictionary = functions.read_config_segment(segment = 'GOOGLE_TRENDS')
 # run_timestamp = str(functions.get_current_timestamp())
 dwh_conn = functions.get_connection(
@@ -121,15 +128,39 @@ def parse_downloaded_files():
         )
         logger.info(f'files matching search pattern: {matching_files}')
         for file in matching_files:
-            logger.info(f'PARSING FILE: {file}')
-            converter.convert(
-                file,
-                config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES'],
-                file_suffix=str(functions.get_current_timestamp()) 
-            )
+            validation = parsing_functions.validate_json_schema(json_path = file, schema_path = json_schema_path)
+            try:
+                if bool(validation['valid']):
+                    logger.info(f'PARSING FILE: {file}')
+                    converter.convert(
+                        file,
+                        config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES'],
+                        file_suffix=str(functions.get_current_timestamp()) 
+                    )
+            except Exception as e:
+                error_message = f'''
+                    JOB_NAME: {job_config['JOB_NAME']}
+                    DATA_SOURCE: {job_config['DATA_SOURCE']} 
+                    
+                    ERROR: {e}
+                    ----------------------------------------------------
+                    job can be found here: {job_config['FILE_DIRECTORY']}
+                '''
+                logger.error(error_message)
+                raise Exception(error_message)
         return True
     except Exception as e:
-        raise Exception(f'parse_downloaded_files function failed:\n Error: {e}') from e
+        error_message = f'''
+                    JOB_NAME: {job_config['JOB_NAME']}
+                    DATA_SOURCE: {job_config['DATA_SOURCE']} 
+                    
+                    parse_downloaded_files function failed
+                    ERROR: {e}
+                    ----------------------------------------------------
+                    job can be found here: {job_config['FILE_DIRECTORY']}
+                '''
+        logger.error(error_message)
+        raise Exception(error_message)
     
     
 
@@ -183,9 +214,3 @@ def insert_into_temp():
     parse_downloaded_files()
     load_parquets_into_temp_table()
     # cleanup_files()
-
-
-# insert_into_temp()
-filepath = os.path.join(config_dictionary['GOOGLE_TRENDS_DIR_DOWNLOADED_FILES'], 'google_trends_20260117102117.json')
-parsing_functions.save_json_schema(json_path = filepath, output_path = 'schema')
-# schema = parsing_functions.get_json_schema(filename = 'google_trends_20260117102117.json', directory=config_dictionary['GOOGLE_TRENDS_DIR_DOWNLOADED_FILES'])
