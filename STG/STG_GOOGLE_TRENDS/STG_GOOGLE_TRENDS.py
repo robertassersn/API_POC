@@ -7,6 +7,7 @@ import sys
 import os 
 import google_trends_functions
 import logging
+logger = logging.getLogger(__name__)
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__)
@@ -43,7 +44,9 @@ sql_files = [
 sqls_to_execute = {
     name: f'{path_to_sql}{name}.sql' for name in sql_files
 }
-
+JOB_RUN_ID = str(
+        functions.get_job_run_id(connection_type = job_config['CONNECTION_TYPE'])
+    )
 '''
 params CAN and should be automated
 '''
@@ -53,9 +56,8 @@ params = {
     ,"${SCHEMA_JOB_INFO}":config_dictionary['SCHEMA_JOB_INFO']
     ,"${JOB_STATUS_STARTED}":config_dictionary['JOB_STATUS_STARTED']
     ,"${JOB_STATUS_FINISHED}":config_dictionary['JOB_STATUS_FINISHED']
-    ,"${JOB_RUN_ID}":str(
-        functions.get_job_run_id(connection_type = job_config['CONNECTION_TYPE'])
-    )
+    ,"${JOB_STATUS_ERROR}":config_dictionary['JOB_STATUS_ERROR']
+    ,"${JOB_RUN_ID}":JOB_RUN_ID
 }
 
 """
@@ -70,6 +72,7 @@ try:
 
     functions.sql_function(sqls_to_execute["trends_search_insert_to_main"] ,params ,connection_type)
     functions.sql_function(sqls_to_execute["trends_search__values_insert_to_main"] ,params ,connection_type)
+    logger.info(f'JOB_RUN_ID,{JOB_RUN_ID}')
     functions.sql_function(sqls_to_execute["end_job_run"] ,params ,connection_type)
     functions.end_log()
 except Exception as e:

@@ -4,7 +4,7 @@ set
     ,end_timestamp = now()
 where 
     job_run_id = ${JOB_RUN_ID}
-    and job_name = 'STG_GOOGLE_TRENDS'
-    and datasource = 'GOOGLE'
+    -- and job_name = 'STG_GOOGLE_TRENDS'
+    -- and datasource = 'GOOGLE'
 ;
 commit

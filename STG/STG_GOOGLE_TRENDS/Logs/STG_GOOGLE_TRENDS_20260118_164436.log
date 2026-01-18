@@ -1,0 +1,4 @@
+[2026-01-18 16:44:36,110] INFO [project_files.functions:458] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\STG_GOOGLE_TRENDS.py
+[2026-01-18 16:44:36,135] INFO [project_files.functions:320] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\start_job_run.sql
+[2026-01-18 16:44:36,166] INFO [project_files.functions:320] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run_error.sql
+[2026-01-18 16:44:36,167] INFO [project_files.functions:324] COMPLETED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run_error.sql
