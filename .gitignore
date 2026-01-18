@@ -1,7 +1,6 @@
-# Logs - anywhere in project (must be at top)
-**/logs/
-**/Logs/
-**/*.log
+# Python
+__pycache__/
+task_venv/
 
 # Files directories
 files/downloaded_files/*
@@ -12,11 +11,12 @@ files/archived_files/*
 !files/parsed_files/.gitkeep
 !files/archived_files/.gitkeep
 
-# Python
-__pycache__/
-task_venv/
-
 # Airflow Docker
 airflow-docker/*
 !airflow-docker/dags/
 !airflow-docker/docker-compose.yml
+
+# Logs - MUST be after airflow exceptions to override them
+**/logs/
+**/Logs/
+**/*.log
