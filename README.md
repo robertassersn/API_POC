@@ -27,9 +27,11 @@
 DIRECTORY:
 created model, listed in STG/STG_GOOGLE_TRENDS/
 - executed from STG/STG_GOOGLE_TRENDS/STG_GOOGLE_TRENDS.py
+  
 PREREQUISTES:
   - deployment script needs to be executed in order to successfully run the job
     - it can be found at: STG/STG_GOOGLE_TRENDS/deployment_scripts/STG_GOOGLE_TRENDS.sql
+      
 ALGORITHM:
 - script uses serpapi library to retrieve google_trends results and saves the results in JSON file at provided Directory
 - before parsing is began, script compares current json schema versus schema.json file located at STG/STG_GOOGLE_TRENDS/ directory
