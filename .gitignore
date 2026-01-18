@@ -6,7 +6,7 @@
 !/files/downloaded_files/.gitkeep
 !/files/parsed_files/.gitkeep
 !/files/archived_files/.gitkeep
-!/Logs/*
+/Logs/*
 !/Logs/.gitkeep
 !/__pycache__
 !/task_venv
