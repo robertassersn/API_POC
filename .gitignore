@@ -1,17 +1,25 @@
-# Ignore contents but keep directory (add empty .gitkeep inside)
-/files/downloaded_files/*
-/files/parsed_files/*
-/files/archived_files/*
-!/files/.gitkeep
-!/files/downloaded_files/.gitkeep
-!/files/parsed_files/.gitkeep
-!/files/archived_files/.gitkeep
-/Logs/*
-!/Logs/.gitkeep
-!/__pycache__
-!/task_venv
-/task_venv
+# Files directories
+files/downloaded_files/*
+files/parsed_files/*
+files/archived_files/*
+!files/.gitkeep
+!files/downloaded_files/.gitkeep
+!files/parsed_files/.gitkeep
+!files/archived_files/.gitkeep
+
+# Logs
+Logs/*
+!Logs/.gitkeep
+
+# Python
+__pycache__/
+task_venv/
+
+# Airflow Docker - ignore everything except specific files
 airflow-docker/*
-!airflow-docker/.gitkeep
 !airflow-docker/dags/
 !airflow-docker/docker-compose.yml
+!airflow-docker/.gitkeep
+airflow-docker/logs/
+airflow-docker/config/
+airflow-docker/plugins/
