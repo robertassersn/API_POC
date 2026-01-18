@@ -70,3 +70,4 @@ JOB
 -  Airflow metadata can be passed via flags to the script and database
 -  sql scripts e.g start_log.sql,end_log.sql, end_log_error.sql must be called from Python functions. That accept necessary parameters and job specific details.
 -  Need to add and integrate function for old .log file deletion
+-  In addition, current approach executes functions/operations linearly, multiple steps could be executed concurently
