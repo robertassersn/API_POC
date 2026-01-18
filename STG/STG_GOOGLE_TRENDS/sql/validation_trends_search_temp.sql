@@ -3,12 +3,12 @@ with
 		(select 
 			min(date::date) as first_entry
 			,max(date::date) as last_entry
-		from google_trends_temp.trends_search_temp
+		from ${SCHEMA_GOOGLE_TRENDS_TEMP}.trends_search_temp
 		)
 	,date_list as
 		(select 
 			dd.full_date 
-		from dwh_dimensions.dim_date as dd
+		from ${SCHEMA_DWH_DIMENSIONS}.dim_date as dd
 		inner join table_date_range as tt on 1=1  
 		where 
 			dd.full_date >= tt.first_entry 
@@ -27,7 +27,7 @@ select
 	'DATE_VERIFICATION' as verification
 	,count(1) as affected_entries
 from date_list dl 
-left join google_trends_temp.trends_search_temp t1 on t1.date::date = dl.full_date 
+left join ${SCHEMA_GOOGLE_TRENDS_TEMP}.trends_search_temp t1 on t1.date::date = dl.full_date 
 where 
 	t1.date is null 
 group by 1 
@@ -47,5 +47,16 @@ having
 		sum(duplicate_count)
 		,0
 	) > 0
-
+union all 
+select 
+	'NULL VALUES' as verification
+	,count(1) as affected_entries
+from ${SCHEMA_GOOGLE_TRENDS_TEMP}.trends_search_temp
+where 
+	google_trends_id is null 
+	or "date" is null
+	or "timestamp" is null 
+	or source_file_name is null 
+group by 1 
+having count(1) > 1 
 ;
