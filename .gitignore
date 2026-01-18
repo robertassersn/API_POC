@@ -9,3 +9,5 @@
 !/Logs/*
 !/Logs/.gitkeep
 !/__pycache__
+!/task_venv
+/task_venv

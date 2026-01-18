@@ -12,8 +12,8 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-# Path to your Python script (Docker mounted volume)
 SCRIPT_PATH = '/opt/airflow/project/STG/STG_GOOGLE_TRENDS/STG_GOOGLE_TRENDS.py'
+VENV_ACTIVATE = '/opt/airflow/project/task_venv/bin/activate'
 
 with DAG(
     dag_id='google_trends_pipeline',
@@ -27,5 +27,5 @@ with DAG(
     
     run_pipeline = BashOperator(
         task_id='run_google_trends_pipeline',
-        bash_command=f'python {SCRIPT_PATH}',
+        bash_command='source {} && python {}'.format(VENV_ACTIVATE, SCRIPT_PATH),
     )

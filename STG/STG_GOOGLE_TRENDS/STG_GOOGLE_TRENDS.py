@@ -27,7 +27,7 @@ job_config = {
 
 path_to_sql = os.path.join(
     job_config['FILE_DIRECTORY']
-    ,'sql\\'
+    ,'sql/'
 )
 config_dictionary = functions.read_config_segment()
 connection_type = 'POSTGRESQL_CONN'
