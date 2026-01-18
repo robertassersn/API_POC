@@ -1,11 +1,13 @@
 insert into ${SCHEMA_JOB_INFO}.job_runs(
-	job_name 
+    job_run_id
+	,job_name 
 	,datasource 
 	,start_timestamp 
 	,end_timestamp 
 	,job_status 
 ) values (
-    'STG_GOOGLE_TRENDS'
+    '${JOB_RUN_ID}'
+    ,'STG_GOOGLE_TRENDS'
     ,'GOOGLE'
     ,now()
     ,null

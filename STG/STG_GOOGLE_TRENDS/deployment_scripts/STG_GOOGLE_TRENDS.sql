@@ -6,14 +6,6 @@
 ██████  ██████  ███████ 
 */
 create schema job_info;
-CREATE SEQUENCE job_info.seq_job_variables_id
-    START WITH 1
-    INCREMENT BY 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    NO CYCLE
-    CACHE 1
-;
 CREATE SEQUENCE job_info.seq_job_run_id
     START WITH 1
     INCREMENT BY 1
@@ -22,17 +14,8 @@ CREATE SEQUENCE job_info.seq_job_run_id
     NO CYCLE
     CACHE 1
 ;
-    
-create table job_info.job_variables(
-	job_variable_id int default nextval('job_info.seq_job_variables_id')
-	,job_name varchar(60) not null
-	,datasource varchar(60) not null
-	,variable_name varchar(60) not null
-	,variable_value varchar(100)
-    ,updated_at_timestamp timestamp default now()
-);
 create table job_info.job_runs(
-	job_run_id int default nextval('job_info.seq_job_run_id')
+	job_run_id int not null
     ,airflow_dag_id varchar(30)
     ,airflow_dag_run_id varchar(30)
 	,job_name varchar(60) not null

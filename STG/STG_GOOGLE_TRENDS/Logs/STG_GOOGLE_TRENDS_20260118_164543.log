@@ -1,0 +1,70 @@
+[2026-01-18 16:45:43,599] INFO [project_files.functions:458] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\STG_GOOGLE_TRENDS.py
+[2026-01-18 16:45:43,630] INFO [project_files.functions:320] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\start_job_run.sql
+[2026-01-18 16:45:43,634] INFO [project_files.functions:324] COMPLETED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\start_job_run.sql
+[2026-01-18 16:45:43,634] INFO [google_trends_functions:117] STARTED parse_downloaded_files function
+[2026-01-18 16:45:43,634] INFO [google_trends_functions:134] files matching search pattern: ['C:\\Users\\sersn\\Documents\\GitHub\\google_trends_to_postgres\\files\\downloaded_files\\google_trends\\google_trends_20260117102117.json']
+[2026-01-18 16:45:43,646] INFO [google_trends_functions:139] PARSING FILE: C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\files\downloaded_files\google_trends\google_trends_20260117102117.json
+[2026-01-18 16:45:43,847] INFO [project_files.functions:475] TRUNCATING TABLE google_trends_temp.trends_search_temp
+[2026-01-18 16:45:43,917] INFO [project_files.functions:422] Loaded 181 rows into google_trends_temp.trends_search_temp
+[2026-01-18 16:45:44,050] INFO [project_files.functions:422] Loaded 181 rows into google_trends_temp.trends_search_temp
+[2026-01-18 16:45:44,052] INFO [project_files.functions:475] TRUNCATING TABLE google_trends_temp.trends_search__values_temp
+[2026-01-18 16:45:44,106] INFO [project_files.functions:422] Loaded 724 rows into google_trends_temp.trends_search__values_temp
+[2026-01-18 16:45:44,142] INFO [project_files.functions:422] Loaded 724 rows into google_trends_temp.trends_search__values_temp
+[2026-01-18 16:45:44,167] ERROR [project_files.functions:349] 
+            c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\validation_trends_search_temp.sql VERIFICATION FAILED
+            
+
+            with 
+	table_date_range as 
+		(select 
+			min(date::date) as first_entry
+			,max(date::date) as last_entry
+		from google_trends_temp.trends_search_temp
+		)
+	,date_list as
+		(select 
+			dd.full_date 
+		from dwh_dimensions.dim_date as dd
+		inner join table_date_range as tt on 1=1  
+		where 
+			dd.full_date >= tt.first_entry 
+			and dd.full_date < tt.last_entry
+		)
+	,duplicate_validation as (
+		select 
+			google_trends_id 
+			,count(1) as "n"
+			,count(1)-1 as duplicate_count
+		from google_trends_temp.trends_search_temp
+		group by 1 
+		having count(1) > 1
+	) 
+select 
+	'DATE_VERIFICATION' as verification
+	,count(1) as affected_entries
+from date_list dl 
+left join google_trends_temp.trends_search_temp t1 on t1.date::date = dl.full_date 
+where 
+	t1.date is null 
+group by 1 
+having 
+	count(1) > 0
+UNION ALL 
+select 
+	'DUPLICATES_FOUND' as verification 
+	,coalesce(
+		sum(duplicate_count)
+		,0
+	) as affected_entries
+from duplicate_validation t
+group by 1
+having 
+	coalesce(
+		sum(duplicate_count)
+		,0
+	) > 0
+
+;
+        
+[2026-01-18 16:45:44,195] INFO [project_files.functions:320] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run_error.sql
+[2026-01-18 16:45:44,197] INFO [project_files.functions:324] COMPLETED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\sql\end_job_run_error.sql
