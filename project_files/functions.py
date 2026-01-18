@@ -329,6 +329,29 @@ def sql_function(
                 cur.close()
                 conn.close()
 
+def sql_verification(path_to_sql, params, connection_type):
+    """
+    runs sql query, and if sql returns at least 1 row, returns error
+    """
+    executable_sql = sql_replace_parameters(path_to_sql, params)
+    
+    with get_connection(connection_type) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(executable_sql)
+            result = cursor.fetchone()
+    if result is not None:
+        message = f'''
+            VERIFICATION FAILED
+
+            {executable_sql}
+        '''
+        logger.error(message)
+        raise(message)
+    else:
+        logger.info("VERIFICATION PASSED")
+    return result
+
+
 def list_files_in_directory_regex(directory, regex_pattern, recursive=False):
     """
     List files in directory matching a regex pattern.
@@ -437,26 +460,28 @@ def end_log():
     logging.info(f'JOB COMPLETED')
 
 
-def truncate_table(target_table: str, dwh_conn) -> bool:
+def truncate_table(target_table: str, connection_type: str) -> bool:
     """
     Truncate a PostgreSQL table.
     
     Args:
         target_table: Schema-qualified table name (e.g., 'schema_name.table_name')
-        dwh_conn: Active psycopg2 connection object
+        connection_type: Connection type for get_connection()
     
     Returns:
         True if successful
     """
+    logger.info(f'TRUNCATING TABLE {target_table}')
     try:
-        with dwh_conn.cursor() as cursor:
-            cursor.execute(f'TRUNCATE TABLE {target_table};')
-        dwh_conn.commit()
+        with get_connection(connection_type) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(f'TRUNCATE TABLE {target_table};')
+            conn.commit()
         return True
     except Exception as e:
-        dwh_conn.rollback()
-        raise Exception(f'truncate_table failed for {target_table}: {e}') from e
-    
+        error_message = f'truncate_table failed for {target_table}: {e}'
+        logger.error(error_message)
+        raise Exception(error_message) 
 
 def get_job_run_id(connection_type: str) -> int:
     """
@@ -476,3 +501,5 @@ def get_job_run_id(connection_type: str) -> int:
         return job_run_id
     except Exception as e:
         raise Exception(f'get_job_run_id failed: {e}') from e
+    
+

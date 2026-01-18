@@ -6,11 +6,14 @@ Many of hardcored values may be stored inside of database and enabled and disabl
 import sys 
 import os 
 import google_trends_functions
+import logging
+logger = logging.getLogger(__name__)
 base_path = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__),'../../'
-        )
+        os.path.dirname(__file__)
+        ,'../../'
     )
+)
 from project_files import functions
 sys.path.append(base_path)
 
@@ -20,7 +23,6 @@ job_config = {
     ,"CONNECTION_TYPE":"POSTGRESQL_CONN"
     ,"FILE_DIRECTORY":os.path.dirname(os.path.abspath(__file__))
     ,"FILE_NAME":os.path.basename(__file__)
-    ,"JOB_LAYER":'STG'
 }
 
 path_to_sql = os.path.join(
@@ -41,9 +43,7 @@ sql_files = [
 sqls_to_execute = {
     name: f'{path_to_sql}{name}.sql' for name in sql_files
 }
-# dwh_conn = functions.get_connection(
-#         connection_type 
-#     )
+
 '''
 params CAN and should be automated
 '''
@@ -57,11 +57,31 @@ params = {
         functions.get_job_run_id(connection_type = job_config['CONNECTION_TYPE'])
     )
 }
-print(f'PARAMETER LIST: \n {params}')
 
 """
 ALGORITHM OF THE JOB
 """
-functions.sql_function(sqls_to_execute["start_job_run"] ,params ,connection_type)
+try:
+    functions.start_log(__file__)
+    functions.sql_function(sqls_to_execute["start_job_run"] ,params ,connection_type)
+    google_trends_functions.insert_into_temp()
+    functions.sql_verification(sqls_to_execute["validation_trends_search_temp"] ,params ,connection_type)
+    functions.sql_verification(sqls_to_execute["validation_trends_search__values_temp"] ,params ,connection_type)
 
+    functions.sql_function(sqls_to_execute["trends_search_insert_to_main"] ,params ,connection_type)
+    functions.sql_function(sqls_to_execute["trends_search__values_insert_to_main"] ,params ,connection_type)
+    functions.sql_function(sqls_to_execute["end_job_run"] ,params ,connection_type)
+    functions.end_log(__file__)
+except Exception as e:
+    # such message template may be more useful for email messages
+    error_message = f'''
+        JOB_NAME: {job_config['JOB_NAME']}
+        DATA_SOURCE: {job_config['DATA_SOURCE']} 
+        
+        ERROR: {e}
+        ----------------------------------------------------
+        job can be found here: {job_config['FILE_DIRECTORY']}
+    '''
+    logger.error('JOB FAILED')
+    raise e
 # print(path_to_sql)

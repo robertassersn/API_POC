@@ -122,7 +122,7 @@ def parse_downloaded_files():
     child_separator='__',
     key_config={
         'google_trends': ['date', 'timestamp'],
-        'google_trends__values': ['query', 'value', 'extracted_value'],
+        'google_trends__values': ['query', 'value', 'extracted_value','google_trends_id'],
     }
 )
     try:
@@ -186,13 +186,16 @@ def load_parquets_into_temp_table():
             }
         ]
 
-
+        
         for step in load_steps: 
-
+            functions.truncate_table(
+                target_table = step['target_table']
+                , connection_type = connection_type
+            )
             functions.load_files_from_directory_to_postgres(
                 file_directory = config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES']
                 ,filename_pattern = step['filename_pattern']
-                ,connection_type = connection_type # bad practice, its better to connect to database using WITH statement inside of function, because if there would be conn.close() in function, we'd have problems
+                ,connection_type = connection_type 
                 ,target_table = step['target_table']
             )
     except Exception as e:
@@ -221,4 +224,3 @@ def insert_into_temp():
     # cleanup_files()
 
 
-insert_into_temp()
