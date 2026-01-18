@@ -1,4 +1,0 @@
-[2026-01-18 09:34:40,060] INFO [common_files.functions:426] STARTED:c:\Users\sersn\Documents\GitHub\google_trends_to_postgres\STG\STG_GOOGLE_TRENDS\google_trends_functions.py
-[2026-01-18 09:34:40,060] INFO [__main__:109] STARTED parse_downloaded_files function
-[2026-01-18 09:34:40,060] INFO [__main__:122] files matching search pattern: ['C:\\Users\\sersn\\Documents\\GitHub\\google_trends_to_postgres\\files\\downloaded_files\\google_trends\\google_trends_20260117102117.json']
-[2026-01-18 09:34:40,060] INFO [__main__:124] PARSING FILE: C:\Users\sersn\Documents\GitHub\google_trends_to_postgres\files\downloaded_files\google_trends\google_trends_20260117102117.json
