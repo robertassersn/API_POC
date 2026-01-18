@@ -11,3 +11,4 @@
 !/__pycache__
 !/task_venv
 /task_venv
+/airflow-docker/*
