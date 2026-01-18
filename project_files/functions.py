@@ -341,14 +341,15 @@ def sql_verification(path_to_sql, params, connection_type):
             result = cursor.fetchone()
     if result is not None:
         message = f'''
-            VERIFICATION FAILED
+            {path_to_sql} VERIFICATION FAILED
+            
 
             {executable_sql}
         '''
         logger.error(message)
         raise(message)
     else:
-        logger.info("VERIFICATION PASSED")
+        logger.info(f"{path_to_sql} VERIFICATION PASSED")
     return result
 
 
