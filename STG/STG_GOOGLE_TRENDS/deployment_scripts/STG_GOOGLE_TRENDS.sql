@@ -54,11 +54,11 @@ create table google_trends_temp.trends_search_temp
 	(
 	google_trends_id int
 	,date varchar(30)
-	,unix_timestamp bigint
+	,timestamp bigint
 	)
 ;
 
-create table google_trends_temp.trend_search__values_temp(
+create table google_trends_temp.trends_search__values_temp(
 	 query varchar(300)
 	 ,value varchar(300)
 	 ,extracted_value int

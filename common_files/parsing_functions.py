@@ -2,10 +2,54 @@ from pathlib import Path
 from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
+import json
+import os 
+from jsonschema import validate, ValidationError, Draft7Validator
+from genson import SchemaBuilder  # For generating schemas
 
-def return_parquet_schema(directory,file_name):
-    schema = pq.read_schema(f"{directory}/{file_name}.parquet")
+def generate_json_schema(json_path: str) -> dict:
+    """Generate JSON Schema from a JSON file."""
+    builder = SchemaBuilder()
+    
+    with open(json_path) as f:
+        data = json.load(f)
+    
+    builder.add_object(data)
+    return builder.to_schema()
+
+
+def save_json_schema(json_path: str, output_path: str) -> dict:
+    """Generate and save JSON Schema to file."""
+    schema = generate_json_schema(json_path)
+    
+    with open(output_path, 'w') as f:
+        json.dump(schema, f, indent=2)
+    
     return schema
+
+
+def validate_json_schema(json_path: str, schema_path: str) -> dict:
+    """Validate JSON file against a JSON Schema."""
+    with open(json_path) as f:
+        data = json.load(f)
+    
+    with open(schema_path) as f:
+        schema = json.load(f)
+    
+    validator = Draft7Validator(schema)
+    errors = list(validator.iter_errors(data))
+    
+    return {
+        'valid': len(errors) == 0,
+        'errors': [
+            {
+                'path': list(e.path),
+                'message': e.message,
+                'value': e.instance
+            }
+            for e in errors
+        ]
+    }
 
 class JsonToParquetConverter:
     """Convert complex nested JSON to multiple Parquet files with configurable naming."""
@@ -26,7 +70,8 @@ class JsonToParquetConverter:
         self,
         input_path: str | Path,
         output_dir: str | Path,
-        compression: str = 'snappy'
+        compression: str = 'snappy',
+        file_suffix: str = ''
     ) -> dict[str, Path]:
         """Convert JSON file to multiple Parquet files."""
         import json
@@ -46,7 +91,9 @@ class JsonToParquetConverter:
                 continue
             
             table = pa.Table.from_pylist(rows)
-            output_path = output_dir / f"{table_name}.parquet"
+            # Apply suffix to filename only, not to table_name in data
+            filename = f"{table_name}_{file_suffix}.parquet" if file_suffix else f"{table_name}.parquet"
+            output_path = output_dir / filename
             pq.write_table(table, output_path, compression=compression)
             output_files[table_name] = output_path
         

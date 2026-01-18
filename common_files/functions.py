@@ -5,12 +5,14 @@ import sys
 import configparser
 import logging
 import psycopg2
-from psycopg2 import OperationalError
 from datetime import date, timedelta,datetime
 from dateutil.relativedelta import relativedelta
 import re 
 import shutil
 import argparse
+import pyarrow.parquet as pq
+from io import StringIO
+import csv
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../'
@@ -24,7 +26,18 @@ _config_parser=None
 
 logger = logging.getLogger(__name__)
 
-
+def cleanup_old_logs(log_dir, days_to_keep=10):
+    cutoff_time = datetime.now() - timedelta(days=days_to_keep)
+    
+    for filename in os.listdir(log_dir):
+        file_path = os.path.join(log_dir, filename)
+        
+        if filename.endswith(".log"):  # Ensure we're only handling log files
+            file_creation_time = datetime.fromtimestamp(os.path.getctime(file_path))
+            
+            if file_creation_time < cutoff_time:
+                os.remove(file_path)  # Delete old log file
+                logging.info(f"Deleted old log file: {filename}")
 
 def get_current_date():
     return date.today().strftime("%Y-%m-%d")
@@ -116,7 +129,7 @@ def get_connection(
         'POSTGRESQL':lambda:get_postgresql_connection(conn_info)
     }
 
-    return CONNECTORS[f'{connection_type}']()
+    return CONNECTORS[f'{db_type}']()
 
 import os
 import csv
@@ -273,17 +286,23 @@ def sql_replace_parameters(path_to_sql, params):
         executable_sql = string_replace_parameters( executable_sql,params)
     return executable_sql
 
+def get_sql_operation_type(command: str) -> str:
+    # Define regex pattern with word boundaries
+    for keyword in ['insert', 'update', 'delete']:
+        pattern = r'\b' + keyword + r'\b'
+        if re.search(pattern, command, re.IGNORECASE):
+            return keyword.upper()
+    return "OTHER"
+
 def sql_function(
         path_to_sql
-        ,filename
         ,params
-        ,JOB_NAME
-        ,DATA_SOURCE
-        ,dwh_conn
+        ,connection_type
         ):
     executable_sql = sql_replace_parameters(path_to_sql, params)
     sqlCommands = executable_sql.split(';')
-    conn_info = get_db_connection_params('vertica_dwh')
+    # conn_info = get_db_connection_params('vertica_dwh')
+    conn_info = read_config_segment(segment = connection_type)
     with get_connection(conn_info) as conn:
         with conn.cursor() as cur:
             logger.info(f'STARTED:{path_to_sql}')
@@ -334,63 +353,77 @@ def list_files_in_directory_regex(directory, regex_pattern, recursive=False):
     
     return sorted(matched_files)
 
-def execute_step(job, vertica_conn, path_to_sql_scripts, execution_step, params):
-    connection_type = execution_step['connection_type']
-    data_source = execution_step['data_source']
-    step_type = execution_step['step_type']
-    step_name = execution_step['step_name']
-    sql_file_name = step_name + '.sql'
-    step_path_to_sql_script = os.path.join(path_to_sql_scripts, sql_file_name)
+def load_parquet_to_postgres(filepath, table_name, conn, truncate=False):
+    """
+    Load parquet file into PostgreSQL using COPY.
+    
+    Args:
+        filepath: Path to parquet file
+        table_name: Destination table name with schema (e.g., 'staging.google_trends')
+        conn: Existing psycopg2 connection
+        truncate: If True, truncate table before loading
+    
+    Returns:
+        Number of rows loaded
+    """
+    table = pq.read_table(filepath)
+    
+    buffer = StringIO()
+    writer = csv.writer(buffer, quoting=csv.QUOTE_MINIMAL)
+    
+    for batch in table.to_batches():
+        rows = zip(*[col.to_pylist() for col in batch.columns])
+        writer.writerows(rows)
+    
+    buffer.seek(0)
+    
+    with conn.cursor() as cur:
+        if truncate:
+            cur.execute(f"TRUNCATE TABLE {table_name}")
+        
+        cur.copy_expert(
+            f"COPY {table_name} ({','.join(table.column_names)}) FROM STDIN WITH CSV",
+            buffer
+        )
+    
+    conn.commit()
+    print(f"Loaded {table.num_rows} rows into {table_name}")
+    return table.num_rows
 
-    logger.info(f'Execute step: {step_type} -> {step_name} -> {step_path_to_sql_script}')
-    if execution_step.get('disabled') == 'Y':
-        logger.warning(f'Step marked as not Valid: {step_type} -> {step_name} -> {step_path_to_sql_script}')
-        return
+def load_files_from_directory_to_postgres(
+        file_directory
+        ,filename_pattern
+        ,dwh_conn 
+        ,target_table
+    ):
+    matching_files = list_files_in_directory_regex(
+        directory = file_directory
+        , regex_pattern = f'{filename_pattern}'
+        , recursive=False
+    )
+    for filename in matching_files:
+        load_parquet_to_postgres(
+            filepath = filename 
+            , table_name = target_table
+            , conn = dwh_conn
+            , truncate=False
+            )
+        
+def start_log(in_file):
+    # Create "Logs" directory if it doesn't exist
+    current_directory = os.path.dirname(os.path.abspath(sys.argv[0]))  # Get the root script directory
+    log_dir = os.path.join(current_directory, "Logs")  # Ensure the "Logs" directory is in the root script's directory
+    os.makedirs(log_dir, exist_ok=True)
+    # Generate log file name with timestamp and store it in "Logs" directory
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format: YYYYMMDD_HHMMSS
+    logfile_name = os.path.join(log_dir, f"{os.path.splitext(os.path.basename(in_file))[0]}_{timestamp}.log")  
+    logging.basicConfig(level = logging.DEBUG,format = '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',filename=logfile_name,filemode='w')
+    console = logging.StreamHandler()
+    formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s')
+    console.setFormatter(formatter)
+    logging.getLogger("").addHandler(console)
+    logger = logging.getLogger(__name__)
+    logger.info(f'STARTED:{in_file}')
 
-    if step_type == 'T':
-        step_destination_table = execution_step['target_table']
-        if connection_type == 'vertica': #check_table_lock(vertica_conn,lock_check_schema,lock_check_table):
-            sql_function(path_to_sql_scripts,name,params,job.job_name,job.data_source,vertica_conn,job.run_id,execution_step)
-        execute_transformation(job, vertica_conn, step_path_to_sql_script, params, step_name,
-                               step_destination_table, execution_step, connection_type, data_source)
-    elif step_type == 'V':
-        step_path_to_message_sql = os.path.join(path_to_sql_scripts, 'message_' + sql_file_name)
-        verification_abort = execution_step['msg_type'].upper() == "ERROR"
-        execute_verification(job, vertica_conn, step_path_to_sql_script, params, step_name,
-                             verification_abort, step_path_to_message_sql, execution_step)
-
-def execute_job_plan(job, vertica_conn, path_to_sql_scripts, execution_plan, params):
-    logger.debug('Execute plan execution')
-    # test_job_external_database_connection(
-    #     vertica_conn = vertica_conn
-    #     ,job = job
-    #     )
-    # Group steps by job_step_order
-    grouped_steps = defaultdict(list)
-    for step in execution_plan:
-        grouped_steps[step['job_step_order']].append(step)
-
-    # Sort by job_step_order to maintain execution order
-    for step_order in sorted(grouped_steps.keys()):
-        steps = grouped_steps[step_order]
-        logger.info(f'Executing steps with job_step_order = {step_order}')
-        logger_msg = 'Executing steps '+ str([step['step_name'] for step in steps])
-        logger.info(logger_msg)
-
-
-        # Use ThreadPoolExecutor to run steps in parallel
-        with ThreadPoolExecutor() as executor:
-            futures = []
-            for execution_step in steps:
-                futures.append(executor.submit(
-                    execute_step,
-                    job,
-                    vertica_conn,
-                    path_to_sql_scripts,
-                    execution_step,
-                    params
-                ))
-
-            # Optionally wait for all to complete
-            for future in futures:
-                future.result()  # This will raise exceptions if any occurred
+def end_log():
+    logging.info(f'JOB COMPLETED')

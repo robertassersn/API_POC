@@ -6,3 +6,5 @@
 !/files/downloaded_files/.gitkeep
 !/files/parsed_files/.gitkeep
 !/files/archived_files/.gitkeep
+!/Logs/*
+!/Logs/.gitkeep
