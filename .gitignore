@@ -1,3 +1,8 @@
+# Logs - anywhere in project (must be at top)
+**/logs/
+**/Logs/
+**/*.log
+
 # Files directories
 files/downloaded_files/*
 files/parsed_files/*
@@ -7,22 +12,11 @@ files/archived_files/*
 !files/parsed_files/.gitkeep
 !files/archived_files/.gitkeep
 
-# Logs
-Logs/*
-**/Logs/
-**/logs/
-!Logs/.gitkeep
-
 # Python
 __pycache__/
 task_venv/
 
-# Airflow Docker - ignore everything except specific files
+# Airflow Docker
 airflow-docker/*
 !airflow-docker/dags/
 !airflow-docker/docker-compose.yml
-!airflow-docker/.gitkeep
-airflow-docker/logs/*
-airflow-docker/config/
-airflow-docker/plugins/
-
