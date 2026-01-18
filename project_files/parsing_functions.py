@@ -31,7 +31,7 @@ def save_json_schema(json_path: str, output_path: str) -> dict:
     return schema
 
 
-def validate_json_schema(json_path: str, schema_path: str) -> dict:
+def validate_json_schema(json_path: str, schema_path: str) -> tuple[bool, str]:
     """Validate JSON file against a JSON Schema."""
     with open(json_path) as f:
         data = json.load(f)
@@ -42,17 +42,9 @@ def validate_json_schema(json_path: str, schema_path: str) -> dict:
     validator = Draft7Validator(schema)
     errors = list(validator.iter_errors(data))
     
-    return {
-        'valid': len(errors) == 0,
-        'errors': [
-            {
-                'path': list(e.path),
-                'message': e.message,
-                'value': e.instance
-            }
-            for e in errors
-        ]
-    }
+    if errors:
+        return False, f"{len(errors)} errors. First: {errors[0].message[:100]}"
+    return True, "OK"
 
 
 class JsonToParquetConverter:
