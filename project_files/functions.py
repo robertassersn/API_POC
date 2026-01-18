@@ -13,6 +13,7 @@ import argparse
 import pyarrow.parquet as pq
 from io import StringIO
 import csv
+from contextlib import contextmanager
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../'
@@ -119,17 +120,28 @@ def get_postgresql_connection(conn_info):
     
     return connection
 
-def get_connection(
-        connection_type
-    ):
-
-    conn_info = read_config_segment(segment = connection_type)
+@contextmanager
+def get_connection(connection_type):
+    """
+    Get database connection as context manager.
+    
+    Usage:
+        with get_connection('postgresql_dwh') as conn:
+            # do stuff
+        # connection auto-closes here
+    """
+    conn_info = read_config_segment(segment=connection_type)
     db_type = conn_info.get('type')
+    
     CONNECTORS = {
-        'POSTGRESQL':lambda:get_postgresql_connection(conn_info)
+        'POSTGRESQL': lambda: get_postgresql_connection(conn_info)
     }
-
-    return CONNECTORS[f'{db_type}']()
+    
+    conn = CONNECTORS[db_type]()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 import os
 import csv
@@ -302,18 +314,13 @@ def sql_function(
     executable_sql = sql_replace_parameters(path_to_sql, params)
     sqlCommands = executable_sql.split(';')
     # conn_info = get_db_connection_params('vertica_dwh')
-    conn_info = read_config_segment(segment = connection_type)
-    with get_connection(conn_info) as conn:
+    # conn_info = read_config_segment(segment = connection_type)
+    with get_connection(connection_type) as conn:
         with conn.cursor() as cur:
             logger.info(f'STARTED:{path_to_sql}')
-            cur.execute("SET SESSION AUTOCOMMIT TO OFF;")
             try:
                 for command in sqlCommands:
                     cur.execute(command)
-                    row_count = cur.fetchall()  # This helps surface constraint violations
-                    operation_type = get_sql_operation_type(command)
-                    if operation_type != 'OTHER':
-                        logger.info(f'{operation_type} statement affected row_count: {row_count}')
                 logger.info(f'COMPLETED:{path_to_sql}')
             except Exception as e:
                 conn.rollback()
@@ -427,3 +434,44 @@ def start_log(in_file):
 
 def end_log():
     logging.info(f'JOB COMPLETED')
+
+
+def truncate_table(target_table: str, dwh_conn) -> bool:
+    """
+    Truncate a PostgreSQL table.
+    
+    Args:
+        target_table: Schema-qualified table name (e.g., 'schema_name.table_name')
+        dwh_conn: Active psycopg2 connection object
+    
+    Returns:
+        True if successful
+    """
+    try:
+        with dwh_conn.cursor() as cursor:
+            cursor.execute(f'TRUNCATE TABLE {target_table};')
+        dwh_conn.commit()
+        return True
+    except Exception as e:
+        dwh_conn.rollback()
+        raise Exception(f'truncate_table failed for {target_table}: {e}') from e
+    
+
+def get_job_run_id(connection_type: str) -> int:
+    """
+    Get next job_run_id from sequence.
+    
+    Args:
+        connection_type: Connection type for get_connection()
+    
+    Returns:
+        Next job_run_id value
+    """
+    try:
+        with get_connection(connection_type) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT nextval('job_info.seq_job_run_id')")
+                job_run_id = cursor.fetchone()[0]
+        return job_run_id
+    except Exception as e:
+        raise Exception(f'get_job_run_id failed: {e}') from e
