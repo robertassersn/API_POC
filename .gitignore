@@ -11,12 +11,11 @@ files/archived_files/*
 !files/parsed_files/.gitkeep
 !files/archived_files/.gitkeep
 
-# Airflow Docker
-airflow-docker/*
-!airflow-docker/dags/.gitkeep
-!airflow-docker/docker-compose.yml
+airflow-docker/
 
-# Logs - MUST be after airflow exceptions to override them
+!airflow-docker/docker-compose.yml
+!airflow-docker/dags/
+
 **/logs/
 **/Logs/
 **/*.log
