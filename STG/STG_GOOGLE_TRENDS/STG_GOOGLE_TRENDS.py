@@ -7,7 +7,6 @@ import sys
 import os 
 import google_trends_functions
 import logging
-logger = logging.getLogger(__name__)
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__)
@@ -38,6 +37,7 @@ sql_files = [
     ,'trends_search_insert_to_main'
     ,'trends_search__values_insert_to_main'
     ,'end_job_run'
+    ,'end_job_run_error'
 ]
 
 sqls_to_execute = {
@@ -49,7 +49,7 @@ params CAN and should be automated
 '''
 params = {
     "${SCHEMA_GOOGLE_TRENDS_TEMP}":config_dictionary['SCHEMA_GOOGLE_TRENDS_TEMP']
-    ,"${SCHEMA_GOOGLE_TRENDS_TEMP}":config_dictionary['SCHEMA_GOOGLE_TRENDS_TEMP']
+    ,"${SCHEMA_GOOGLE_TRENDS}":config_dictionary['SCHEMA_GOOGLE_TRENDS']
     ,"${SCHEMA_JOB_INFO}":config_dictionary['SCHEMA_JOB_INFO']
     ,"${JOB_STATUS_STARTED}":config_dictionary['JOB_STATUS_STARTED']
     ,"${JOB_STATUS_FINISHED}":config_dictionary['JOB_STATUS_FINISHED']
@@ -71,9 +71,10 @@ try:
     functions.sql_function(sqls_to_execute["trends_search_insert_to_main"] ,params ,connection_type)
     functions.sql_function(sqls_to_execute["trends_search__values_insert_to_main"] ,params ,connection_type)
     functions.sql_function(sqls_to_execute["end_job_run"] ,params ,connection_type)
-    functions.end_log(__file__)
+    functions.end_log()
 except Exception as e:
     # such message template may be more useful for email messages
+    functions.sql_function(sqls_to_execute["end_job_run_error"] ,params ,connection_type)
     error_message = f'''
         JOB_NAME: {job_config['JOB_NAME']}
         DATA_SOURCE: {job_config['DATA_SOURCE']} 
@@ -82,6 +83,5 @@ except Exception as e:
         ----------------------------------------------------
         job can be found here: {job_config['FILE_DIRECTORY']}
     '''
-    logger.error('JOB FAILED')
     raise e
 # print(path_to_sql)
