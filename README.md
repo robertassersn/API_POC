@@ -3,6 +3,7 @@
 - necessary python packages provided in requirements.txt file
 - in order to use PARAMETERS, MAIN_CONFIG_FILE variable value needs to be filled in .env file
 - airflow-docker/docker-compose.yml must provide within "x-airflow-common:" block following "volume"  "- ../:/opt/airflow/project"
+  - following volume allows airflow to activate venv, install required packages, execute scripts   
 
 ### PROJECT NOTES
 - To have functional reusability, project has "project_files" directory currently containing 2 python files that contain functions dedicated to specific area of work
@@ -37,6 +38,7 @@ ALGORITHM:
 - parsing functions yield 2 parquet files according to their granularity, search_event/search_event_value
 - Files are initially sent temp schema's tables
 - Downloaded and Parsed files are being added into separate .zip files and sent into Archived files directory
+  - contents from directories where  
 - sql verifications are executed, in case of failure, at the moment job is being terminated.
 - if verifications pass, insert is being made from temp schema tables into main schema tables
 
@@ -48,4 +50,22 @@ example:
 <img width="1374" height="439" alt="image" src="https://github.com/user-attachments/assets/e241541c-b6a2-4e4d-91cf-3c4455f7a155" />
 
 
+### Areas for improvement
 
+PERSONAL
+- not everything is still parametrized
+- current parquet parser, needs much improvement. It definately will not handle all possible schema types. I've personally spent more time parsing data into CSV due to business requirements. Which is fine if you have control over output file content and column positioning
+- so far have been doing majority of testing inside of database rather than outside.
+- Not using python's decorators, they can be very helpful in error/warning handling to reduce script length
+JOB
+- current provided API solution can search 5 terms at a time, task requested for 4 terms, however job needs to be modified to handle larger lists of terms, possibly from 1 large list, generate string of 5 terms and iterate.
+-  Can add functionality so send email or notification in case of ERROR or WARNING.
+  - if such functionality is added, need to adjust function used for verifications to allow some verifications to be treated as Warning rather than all treated as ERRORS
+- limit number of hardcodings in job, many of hardcodings can be passed as parameters
+-  STG/STG_GOOGLE_TRENDS/STG_GOOGLE_TRENDS.py following file calls individual functions that are responsible for different tasks, such functions and their order can be controlled from database table.
+   t would also be easier to enable/disable steps that way. In addition Script length would be reduced. 
+-  Each function should be simple and do as little as possible, and should contain docstring description, variables used, input, output clearly explained
+-  Airflow metadata can be passed via flags to the script and database
+-  sql scripts e.g start_log.sql,end_log.sql, end_log_error.sql must be called from Python functions. That accept necessary parameters and job specific details.
+-  Need to add and integrate function for old .log file deletion
+-  
