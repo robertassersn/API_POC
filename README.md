@@ -1,3 +1,6 @@
+### ASSUMPTIONS
+- I assume reader than easily setup airflow environment, add necessary "volumes" in docker-compose file
+- knows how to activate venv in airflow
 
 ### PREREQUISITES
 - necessary python packages provided in requirements.txt file
