@@ -115,58 +115,55 @@ filename_pattern = 'google_trends.*\\.json'
 
 def parse_downloaded_files():
     logger.info('STARTED parse_downloaded_files function')
+    
     converter = parsing_functions.JsonToParquetConverter(
-    root_table_name='google_trends',
-    foreign_key_suffix='_id',        # Will produce: google_trends_id
-    index_column_suffix='_id',       # Will produce: google_trends_id, google_trends__values_id
-    child_separator='__',
-    key_config={
-        'google_trends': ['date', 'timestamp'],
-        'google_trends__values': ['query', 'value', 'extracted_value','google_trends_id'],
-    }
-)
+        root_table_name='google_trends',
+        foreign_key_suffix='_id',
+        index_column_suffix='_id',
+        child_separator='__',
+        key_config={
+            'google_trends': ['date', 'timestamp'],
+            'google_trends__values': ['query', 'value', 'extracted_value', 'google_trends_id'],
+        }
+    )
+    
+    current_step = 'listing files'
+    current_file = None
+    
     try:
         matching_files = functions.list_files_in_directory_regex(
             directory=config_dictionary['GOOGLE_TRENDS_DIR_DOWNLOADED_FILES'],
             regex_pattern=f'{filename_pattern}',
             recursive=False
         )
-        logger.info(f'files matching search pattern: {matching_files}')
+        logger.info(f'Files matching search pattern: {matching_files}')
+        
         for file in matching_files:
-            validation = parsing_functions.validate_json_schema(json_path = file, schema_path = json_schema_path)
-            try:
-                if bool(validation['valid']):
-                    logger.info(f'PARSING FILE: {file}')
-                    converter.convert(
-                        file,
-                        config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES'],
-                        file_suffix=str(functions.get_current_timestamp()) 
-                    )
-            except Exception as e:
-                error_message = f'''
-                    JOB_NAME: {job_config['JOB_NAME']}
-                    DATA_SOURCE: {job_config['DATA_SOURCE']} 
-                    
-                    ERROR: {e}
-                    ----------------------------------------------------
-                    job can be found here: {job_config['FILE_DIRECTORY']}
-                '''
-                logger.error(error_message)
-                raise Exception(error_message)
+            current_file = file
+            
+            current_step = 'validating schema'      
+            is_valid, error_msg = parsing_functions.validate_json_schema(file, json_schema_path)
+
+            if not is_valid:
+                raise ValueError(f"Schema validation failed for {file}: {error_msg}")
+                
+            current_step = 'parsing file'
+            logger.info(f'PARSING FILE: {file}')
+            converter.convert(
+                file,
+                config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES'],
+                file_suffix=str(functions.get_current_timestamp())
+            )
+        
+        logger.info('COMPLETED parse_downloaded_files function')
         return True
+        
     except Exception as e:
-        error_message = f'''
-                    JOB_NAME: {job_config['JOB_NAME']}
-                    DATA_SOURCE: {job_config['DATA_SOURCE']} 
-                    
-                    parse_downloaded_files function failed
-                    ERROR: {e}
-                    ----------------------------------------------------
-                    job can be found here: {job_config['FILE_DIRECTORY']}
-                '''
-        logger.error(error_message)
-        raise Exception(error_message)
-    
+        # Detailed log
+        logger.error(f"JOB: {job_config['JOB_NAME']} | STEP: {current_step} | FILE: {current_file} | ERROR: {e}")
+        
+        # Short exception
+        raise Exception(f"parse_downloaded_files failed at '{current_step}': {e}") from e
     
 
 # parse_downloaded_files()
