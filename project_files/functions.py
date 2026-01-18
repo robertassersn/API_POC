@@ -360,14 +360,14 @@ def list_files_in_directory_regex(directory, regex_pattern, recursive=False):
     
     return sorted(matched_files)
 
-def load_parquet_to_postgres(filepath, table_name, conn, truncate=False):
+def load_parquet_to_postgres(filepath, table_name, connection_type, truncate=False):
     """
     Load parquet file into PostgreSQL using COPY.
     
     Args:
         filepath: Path to parquet file
         table_name: Destination table name with schema (e.g., 'staging.google_trends')
-        conn: Existing psycopg2 connection
+        connection_type: Connection type for get_connection()
         truncate: If True, truncate table before loading
     
     Returns:
@@ -384,23 +384,24 @@ def load_parquet_to_postgres(filepath, table_name, conn, truncate=False):
     
     buffer.seek(0)
     
-    with conn.cursor() as cur:
-        if truncate:
-            cur.execute(f"TRUNCATE TABLE {table_name}")
-        
-        cur.copy_expert(
-            f"COPY {table_name} ({','.join(table.column_names)}) FROM STDIN WITH CSV",
-            buffer
-        )
+    with get_connection(connection_type) as conn:
+        with conn.cursor() as cur:
+            if truncate:
+                cur.execute(f"TRUNCATE TABLE {table_name}")
+            
+            cur.copy_expert(
+                f"COPY {table_name} ({','.join(table.column_names)}) FROM STDIN WITH CSV",
+                buffer
+            )
+        conn.commit()
     
-    conn.commit()
-    print(f"Loaded {table.num_rows} rows into {table_name}")
+    logger.info(f"Loaded {table.num_rows} rows into {table_name}")
     return table.num_rows
 
 def load_files_from_directory_to_postgres(
         file_directory
         ,filename_pattern
-        ,dwh_conn 
+        ,connection_type 
         ,target_table
     ):
     matching_files = list_files_in_directory_regex(
@@ -412,7 +413,7 @@ def load_files_from_directory_to_postgres(
         load_parquet_to_postgres(
             filepath = filename 
             , table_name = target_table
-            , conn = dwh_conn
+            , connection_type = connection_type
             , truncate=False
             )
         

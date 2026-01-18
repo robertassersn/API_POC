@@ -52,10 +52,10 @@ GRANT USAGE ON SCHEMA X to .......
 
 create table google_trends_temp.trends_search_temp
 	(
-	google_trends_id int
+	google_trends_id varchar(30)
 	,date varchar(30)
 	,timestamp bigint
-	,source_file_name
+	,source_file_name varchar(100)
 	)
 ;
 
@@ -63,19 +63,19 @@ create table google_trends_temp.trends_search__values_temp(
 	 query varchar(300)
 	 ,value varchar(300)
 	 ,extracted_value int
-	 ,google_trends int
-	 ,google_trends_id int
-	 ,source_file_name
+	 ,google_trends_id varchar(30)
+	 ,google_trends__values_id varchar(30)
+	 ,source_file_name varchar(100)
 	)
 ;
 
 create table google_trends.trends_search
 	(
-	google_trends_id int
+	google_trends_id varchar(30)
 	,date varchar(30)
 	,timestamp bigint
-	,source_file_name
-	,job_run_id
+	,source_file_name varchar(100)
+	,job_run_id int
 	)
 ;
 
@@ -83,10 +83,10 @@ create table google_trends.trends_search__values(
 	 query varchar(300)
 	 ,value varchar(300)
 	 ,extracted_value int
-	 ,google_trends int
-	 ,google_trends_id int
-	 ,source_file_name
-	 ,job_run_id
+	 ,google_trends_id varchar(30)
+	 ,google_trends__values_id varchar(30)
+	 ,source_file_name varchar(100)
+	 ,job_run_id int
 	)
 ;
 /*
