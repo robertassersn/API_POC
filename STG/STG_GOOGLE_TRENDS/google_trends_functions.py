@@ -13,6 +13,7 @@ job_config = {
     ,"JOB_LAYER": 'STG'
 }
 json_schema_path = os.path.join(job_config['FILE_DIRECTORY'], 'schema.json') 
+connection_type = 'POSTGRESQL_CONN'
 '''
 -----------------------
 NOTES
@@ -115,11 +116,15 @@ filename_pattern = 'google_trends.*\\.json'
 def parse_downloaded_files():
     logger.info('STARTED parse_downloaded_files function')
     converter = parsing_functions.JsonToParquetConverter(
-        root_table_name='google_trends',  
-        foreign_key_suffix='',
-        index_column='google_trends_id',
-        child_separator='__'
-    )
+    root_table_name='google_trends',
+    foreign_key_suffix='_id',        # Will produce: google_trends_id
+    index_column_suffix='_id',       # Will produce: google_trends_id, google_trends__values_id
+    child_separator='__',
+    key_config={
+        'google_trends': ['date', 'timestamp'],
+        'google_trends__values': ['query', 'value', 'extracted_value'],
+    }
+)
     try:
         matching_files = functions.list_files_in_directory_regex(
             directory=config_dictionary['GOOGLE_TRENDS_DIR_DOWNLOADED_FILES'],
@@ -187,7 +192,7 @@ def load_parquets_into_temp_table():
             functions.load_files_from_directory_to_postgres(
                 file_directory = config_dictionary['GOOGLE_TRENDS_DIR_PARSED_FILES']
                 ,filename_pattern = step['filename_pattern']
-                ,dwh_conn = dwh_conn # bad practice, its better to connect to database using WITH statement inside of function, because if there would be conn.close() in function, we'd have problems
+                ,connection_type = connection_type # bad practice, its better to connect to database using WITH statement inside of function, because if there would be conn.close() in function, we'd have problems
                 ,target_table = step['target_table']
             )
     except Exception as e:
@@ -214,3 +219,6 @@ def insert_into_temp():
     parse_downloaded_files()
     load_parquets_into_temp_table()
     # cleanup_files()
+
+
+insert_into_temp()

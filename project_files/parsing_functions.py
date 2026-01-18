@@ -6,6 +6,9 @@ import json
 import os 
 from jsonschema import validate, ValidationError, Draft7Validator
 from genson import SchemaBuilder  # For generating schemas
+from hashlib import sha256
+from typing import Callable
+
 
 def generate_json_schema(json_path: str) -> dict:
     """Generate JSON Schema from a JSON file."""
@@ -51,20 +54,64 @@ def validate_json_schema(json_path: str, schema_path: str) -> dict:
         ]
     }
 
+
 class JsonToParquetConverter:
     """Convert complex nested JSON to multiple Parquet files with configurable naming."""
     
     def __init__(
         self,
         root_table_name: str,
-        foreign_key_suffix: str = '_fk',
-        index_column: str = '_id',
-        child_separator: str = '__'
+        foreign_key_suffix: str = '_id',
+        index_column_suffix: str = '_id',
+        child_separator: str = '__',
+        key_config: dict | None = None
     ):
+        """
+        Args:
+            root_table_name: Name for the root table
+            foreign_key_suffix: Suffix for foreign key columns (e.g., '_id' -> 'google_trends_id')
+            index_column_suffix: Suffix for table's own ID column (e.g., '_id' -> 'google_trends__values_id')
+            child_separator: Separator for nested table names
+            key_config: Dict mapping table names to key configuration:
+                - None or missing: use auto-increment index
+                - str: use existing column as key
+                - list[str]: generate hash from these columns
+                - Callable: custom function(row) -> key value
+        """
         self.root_table_name = root_table_name
         self.foreign_key_suffix = foreign_key_suffix
-        self.index_column = index_column
+        self.index_column_suffix = index_column_suffix
         self.child_separator = child_separator
+        self.key_config = key_config or {}
+    
+    def _get_index_column_name(self, table_name: str) -> str:
+        """Generate index column name for a table (e.g., 'google_trends__values' -> 'google_trends__values_id')"""
+        return f"{table_name}{self.index_column_suffix}"
+    
+    def _get_fk_column_name(self, parent_table_name: str) -> str:
+        """Generate FK column name (e.g., 'google_trends' -> 'google_trends_id')"""
+        return f"{parent_table_name}{self.foreign_key_suffix}"
+    
+    def _generate_key(self, table_name: str, row: dict, idx: int) -> str | int:
+        """Generate key for a row based on key_config."""
+        config = self.key_config.get(table_name)
+        
+        if config is None:
+            return idx
+        
+        if isinstance(config, str):
+            if config not in row:
+                raise ValueError(f"Key column '{config}' not found in {table_name}. Available: {list(row.keys())}")
+            return row[config]
+        
+        if isinstance(config, list):
+            hash_input = '|'.join(str(row.get(col, '')) for col in config)
+            return sha256(hash_input.encode()).hexdigest()[:16]
+        
+        if callable(config):
+            return config(row)
+        
+        raise ValueError(f"Invalid key_config for {table_name}: {config}")
     
     def convert(
         self,
@@ -80,10 +127,12 @@ class JsonToParquetConverter:
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         
+        source_file_name = input_path.name
+        
         with open(input_path) as f:
             data = json.load(f)
         
-        tables = self._extract_tables(data)
+        tables = self._extract_tables(data, source_file_name=source_file_name)
         output_files = {}
         
         for table_name, rows in tables.items():
@@ -91,7 +140,6 @@ class JsonToParquetConverter:
                 continue
             
             table = pa.Table.from_pylist(rows)
-            # Apply suffix to filename only, not to table_name in data
             filename = f"{table_name}_{file_suffix}.parquet" if file_suffix else f"{table_name}.parquet"
             output_path = output_dir / filename
             pq.write_table(table, output_path, compression=compression)
@@ -117,51 +165,75 @@ class JsonToParquetConverter:
         self,
         data: dict | list,
         table_name: str | None = None,
-        parent_fk: dict | None = None
+        parent_fk: dict | None = None,
+        source_file_name: str | None = None
     ) -> dict[str, list[dict]]:
         """Recursively extract tables from nested JSON."""
         tables: dict[str, list[dict]] = {}
         table_name = table_name or self.root_table_name
         parent_fk = parent_fk or {}
         
+        index_column = self._get_index_column_name(table_name)
+        
         if isinstance(data, list):
             for idx, item in enumerate(data):
                 if isinstance(item, dict):
                     row, nested = self._split_scalars_and_nested(item)
                     row.update(parent_fk)
-                    row[self.index_column] = idx
+                    
+                    key_value = self._generate_key(table_name, row, idx)
+                    row[index_column] = key_value
+                    
+                    if source_file_name:
+                        row['source_file_name'] = source_file_name
                     
                     tables.setdefault(table_name, []).append(row)
                     
-                    fk_name = f"{table_name}{self.foreign_key_suffix}"
-                    child_fk = {**parent_fk, fk_name: idx}
+                    fk_column = self._get_fk_column_name(table_name)
+                    child_fk = {**parent_fk, fk_column: key_value}
                     
                     for key, value in nested.items():
                         child_tables = self._extract_tables(
                             value,
                             table_name=f"{table_name}{self.child_separator}{key}",
-                            parent_fk=child_fk
+                            parent_fk=child_fk,
+                            source_file_name=source_file_name
                         )
                         for name, rows in child_tables.items():
                             tables.setdefault(name, []).extend(rows)
                 else:
-                    tables.setdefault(table_name, []).append({
+                    row = {
                         **parent_fk,
                         'value': item
-                    })
+                    }
+                    if source_file_name:
+                        row['source_file_name'] = source_file_name
+                    tables.setdefault(table_name, []).append(row)
         
         elif isinstance(data, dict):
             row, nested = self._split_scalars_and_nested(data)
             row.update(parent_fk)
             
             if row:
+                key_value = self._generate_key(table_name, row, 0)
+                row[index_column] = key_value
+                
+                if source_file_name:
+                    row['source_file_name'] = source_file_name
+                
                 tables.setdefault(table_name, []).append(row)
+                
+                fk_column = self._get_fk_column_name(table_name)
+                child_fk = {**parent_fk, fk_column: key_value}
+            else:
+                child_fk = parent_fk
             
             for key, value in nested.items():
                 child_tables = self._extract_tables(
                     value,
                     table_name=f"{table_name}{self.child_separator}{key}",
-                    parent_fk=parent_fk
+                    parent_fk=child_fk,
+                    source_file_name=source_file_name
                 )
                 for name, rows in child_tables.items():
                     tables.setdefault(name, []).extend(rows)
