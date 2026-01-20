@@ -20,7 +20,7 @@ airflow-docker/
 **/Logs/
 **/*.log
 
-
+.dlt/
 # dlt-specific ignores
 # secrets and credentials
 secrets.toml
