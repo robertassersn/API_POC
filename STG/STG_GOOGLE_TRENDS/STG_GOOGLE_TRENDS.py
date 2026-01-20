@@ -15,6 +15,9 @@ base_path = os.path.abspath(
     )
 )
 from project_files import functions
+cli_passed_args = functions.get_cli_args()
+airflow_dag_id = cli_passed_args.get('dag_id')
+airflow_dag_run_id = cli_passed_args.get('dag_run_id')
 sys.path.append(base_path)
 
 job_config = {
@@ -68,19 +71,17 @@ ALGORITHM OF THE JOB
 """
 try:
     functions.start_log(__file__)
-    functions.sql_function(sqls_to_execute["start_job_run"] ,params ,connection_type)
     google_trends_functions.insert_into_temp()
     functions.sql_verification(sqls_to_execute["validation_trends_search_temp"] ,params ,connection_type)
     functions.sql_verification(sqls_to_execute["validation_trends_search__values_temp"] ,params ,connection_type)
 
     functions.sql_function(sqls_to_execute["trends_search_insert_to_main"] ,params ,connection_type)
     functions.sql_function(sqls_to_execute["trends_search__values_insert_to_main"] ,params ,connection_type)
-    logger.info(f'JOB_RUN_ID,{JOB_RUN_ID}')
-    functions.sql_function(sqls_to_execute["end_job_run"] ,params ,connection_type)
     functions.end_log()
 except Exception as e:
+    functions.end_log_error()
     # such message template may be more useful for email messages
-    functions.sql_function(sqls_to_execute["end_job_run_error"] ,params ,connection_type)
+    # functions.sql_function(sqls_to_execute["end_job_run_error"] ,params ,connection_type)
     error_message = f'''
         JOB_NAME: {job_config['JOB_NAME']}
         DATA_SOURCE: {job_config['DATA_SOURCE']} 
@@ -89,5 +90,5 @@ except Exception as e:
         ----------------------------------------------------
         job can be found here: {job_config['FILE_DIRECTORY']}
     '''
-    raise e
+    raise Exception(error_message)
 # print(path_to_sql)
