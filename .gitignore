@@ -22,8 +22,8 @@ airflow-docker/
 
 .dlt/*
 
-.parameters/*
-!.parameters/job_parameters_example.conf
+parameters/*
+!parameters/job_parameters_example.conf
 # secrets and credentials
 secrets.toml
 *.secrets.toml
