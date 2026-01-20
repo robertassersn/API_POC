@@ -460,6 +460,9 @@ def start_log(in_file):
 def end_log():
     logging.info(f'JOB COMPLETED')
 
+def end_log_error():
+    logging.info(f'JOB FINISHED WITH ERROR')
+
 
 def truncate_table(target_table: str, connection_type: str) -> bool:
     """
@@ -504,3 +507,7 @@ def get_job_run_id(connection_type: str) -> int:
         raise Exception(f'get_job_run_id failed: {e}') from e
     
 
+def start_job_run(connection_type,job_run_id):
+    with get_connection(connection_type) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT nextval('job_info.seq_job_run_id')")

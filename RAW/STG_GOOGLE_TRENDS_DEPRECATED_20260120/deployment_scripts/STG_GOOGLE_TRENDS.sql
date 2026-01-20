@@ -5,26 +5,6 @@
 ██   ██ ██   ██ ██      
 ██████  ██████  ███████ 
 */
-create schema job_info;
-CREATE SEQUENCE job_info.seq_job_run_id
-    START WITH 1
-    INCREMENT BY 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    NO CYCLE
-    CACHE 1
-;
-create table job_info.job_runs(
-	job_run_id int not null
-    ,airflow_dag_id varchar(30)
-    ,airflow_dag_run_id varchar(30)
-	,job_name varchar(60) not null
-	,datasource varchar(60) not null
-	,start_timestamp timestamp not null
-	,end_timestamp timestamp 
-	,job_status varchar(30) not null
-	,status_details varchar(300)
-);
 
 create schema google_trends_temp;
 create schema google_trends;
@@ -78,6 +58,18 @@ ON CONFLICT (date_key) DO NOTHING
 GRANT USAGE ON SCHEMA X to .......
 + table/view creation,
 */
+create table google_trends_temp.raw_trends_search_temp
+	(
+	raw_json_entry varchar(max)
+	)
+;
+
+create table google_trends_temp.raw_trends_search__values_temp(
+	 raw_json_entry varchar(max)
+	)
+;
+
+
 
 create table google_trends_temp.trends_search_temp
 	(
