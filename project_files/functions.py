@@ -511,3 +511,19 @@ def start_job_run(connection_type,job_run_id):
     with get_connection(connection_type) as conn:
         with conn.cursor() as cursor:
             cursor.execute("SELECT nextval('job_info.seq_job_run_id')")
+
+
+def save_raw_json(data: dict, keyword: str,raw_json_dir : str) -> str:
+    """Save raw API response to JSON file."""
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    filename = f"google_trends_{keyword}_{timestamp}.json"
+    filepath = os.path.join(raw_json_dir, filename)
+    
+    print(f"Saving to: {filepath}")  # Debug
+    print(f"Directory exists: {os.path.exists(raw_json_dir)}")  # Debug
+    
+    with open(filepath, 'w') as f:
+        json.dump(data, f, indent=2)
+    
+    print(f"File saved: {os.path.exists(filepath)}")  # Debug
+    return filepath
