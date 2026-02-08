@@ -1,0 +1,7 @@
+[project]
+name = "google_trends_to_postgres"
+version = "0.1.0"
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["orchestration.logs*", "logs*", "*.logs*", "files*", "airflow*"]
