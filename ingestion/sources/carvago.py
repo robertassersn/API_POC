@@ -23,6 +23,7 @@ from typing import Optional, Union, List
 
 @dlt.source
 def carvago_source(
+    job_id: str,
     # Optional params - default None
     country: Optional[Union[int, List[int]]] = None,
     make: Optional[Union[str, List[str]]] = None,
@@ -76,7 +77,9 @@ def carvago_source(
             response = requests.get(base_url, params=params, timeout=30)
             response.raise_for_status()
             data = response.json()
-
+            for record in data:
+                record["job_id"] = job_id  # inject here
+                yield record
             if not data:
                 break
 
