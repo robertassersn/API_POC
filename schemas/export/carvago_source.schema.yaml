@@ -1,0 +1,748 @@
+version: 6
+version_hash: RLcHeAl2OyYIMFD/ycaIMw81+jlxyx2ZlEy84uGGPWQ=
+engine_version: 11
+name: carvago_source
+tables:
+  _dlt_version:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_name:
+        data_type: text
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: false
+      schema:
+        data_type: text
+        nullable: false
+    write_disposition: skip
+    resource: _dlt_version
+    description: Created by DLT. Tracks schema updates
+  _dlt_loads:
+    columns:
+      load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      schema_name:
+        data_type: text
+        nullable: true
+      status:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_version_hash:
+        data_type: text
+        nullable: true
+    write_disposition: skip
+    resource: _dlt_loads
+    description: Created by DLT. Tracks completed loads
+  listedcars:
+    columns:
+      id:
+        nullable: false
+        primary_key: true
+        data_type: text
+      slug:
+        data_type: text
+        nullable: true
+      title:
+        data_type: text
+        nullable: true
+      hot:
+        data_type: bool
+        nullable: true
+      cubic_capacity:
+        data_type: bigint
+        nullable: true
+      power:
+        data_type: bigint
+        nullable: true
+      number_of_seats:
+        data_type: bigint
+        nullable: true
+      fuel_consumption_combined:
+        data_type: double
+        nullable: true
+      fuel_consumption_unit:
+        data_type: text
+        nullable: true
+      power_unit:
+        data_type: text
+        nullable: true
+      carbon_dioxide_emission:
+        data_type: bigint
+        nullable: true
+      equipment_score:
+        data_type: double
+        nullable: true
+      manufactured_from__date:
+        data_type: timestamp
+        nullable: true
+      manufactured_from__timezone_type:
+        data_type: bigint
+        nullable: true
+      manufactured_from__timezone:
+        data_type: text
+        nullable: true
+      manufactured_to__date:
+        data_type: timestamp
+        nullable: true
+      manufactured_to__timezone_type:
+        data_type: bigint
+        nullable: true
+      manufactured_to__timezone:
+        data_type: text
+        nullable: true
+      number_of_cylinders:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      created_at__date:
+        data_type: timestamp
+        nullable: true
+      created_at__timezone_type:
+        data_type: bigint
+        nullable: true
+      created_at__timezone:
+        data_type: text
+        nullable: true
+      updated_at:
+        data_type: timestamp
+        nullable: true
+      active_at:
+        data_type: timestamp
+        nullable: true
+      registration_date:
+        data_type: text
+        nullable: true
+      mileage:
+        data_type: bigint
+        nullable: true
+      number_of_owners:
+        data_type: bigint
+        nullable: true
+      last_registration_country:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      technical_inspection_valid_to__date:
+        data_type: timestamp
+        nullable: true
+      technical_inspection_valid_to__timezone_type:
+        data_type: bigint
+        nullable: true
+      technical_inspection_valid_to__timezone:
+        data_type: text
+        nullable: true
+      export_advantage:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      number_of_keys:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      warranty_mileage:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      source_created_at:
+        data_type: text
+        nullable: true
+      manufacture_date:
+        data_type: text
+        nullable: true
+      first_registration_country:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      former_country:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      wheel_diameter:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      registered:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      only_for_export:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      score:
+        data_type: bigint
+        nullable: true
+      source_name:
+        data_type: text
+        nullable: true
+      external_url:
+        data_type: text
+        nullable: true
+      advertisement_score:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      first_crawl__date:
+        data_type: timestamp
+        nullable: true
+      first_crawl__timezone_type:
+        data_type: bigint
+        nullable: true
+      first_crawl__timezone:
+        data_type: text
+        nullable: true
+      location_post_code:
+        data_type: text
+        nullable: true
+      location_street:
+        data_type: text
+        nullable: true
+      location_city:
+        data_type: text
+        nullable: true
+      location_number:
+        data_type: text
+        nullable: true
+      location_country__id:
+        data_type: text
+        nullable: true
+      location_country__const_key:
+        data_type: text
+        nullable: true
+      location_country__name:
+        data_type: text
+        nullable: true
+      location_country__iso_code:
+        data_type: text
+        nullable: true
+      status:
+        data_type: text
+        nullable: true
+      external_score:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      suggested:
+        data_type: bool
+        nullable: true
+      seller__id:
+        data_type: text
+        nullable: true
+      seller__type__id:
+        data_type: text
+        nullable: true
+      seller__type__const_key:
+        data_type: text
+        nullable: true
+      seller__type__name:
+        data_type: text
+        nullable: true
+      seller__country__id:
+        data_type: text
+        nullable: true
+      seller__country__const_key:
+        data_type: text
+        nullable: true
+      seller__country__name:
+        data_type: text
+        nullable: true
+      seller__country__iso_code:
+        data_type: text
+        nullable: true
+      seller__zip:
+        data_type: text
+        nullable: true
+      seller__rating_average:
+        data_type: bigint
+        nullable: true
+      seller__rating_count:
+        data_type: bigint
+        nullable: true
+      seller__offers_count:
+        data_type: bigint
+        nullable: true
+      hidden:
+        data_type: bool
+        nullable: true
+      in_preparation:
+        data_type: bool
+        nullable: true
+      sold_at:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      delisted_at:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      external_id:
+        data_type: text
+        nullable: true
+      uniform_price:
+        data_type: bigint
+        nullable: true
+      number_of_images:
+        data_type: bigint
+        nullable: true
+      platform:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      available_in_feed:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      available_in_feed_computed:
+        data_type: bool
+        nullable: true
+      make__const_key:
+        data_type: text
+        nullable: true
+      make__label:
+        data_type: text
+        nullable: true
+      model__const_key:
+        data_type: text
+        nullable: true
+      model__label:
+        data_type: text
+        nullable: true
+      vehicle_class:
+        data_type: text
+        nullable: true
+      image__id:
+        data_type: bigint
+        nullable: true
+      image__path:
+        data_type: text
+        nullable: true
+      main_image:
+        data_type: text
+        nullable: true
+      price_information__currency__id:
+        data_type: bigint
+        nullable: true
+      price_information__currency__name:
+        data_type: text
+        nullable: true
+      price_information__currency__const_key:
+        data_type: text
+        nullable: true
+      price_information__vat_reclaimable:
+        data_type: bool
+        nullable: true
+      price_information__margin_data__price_with_margin:
+        data_type: double
+        nullable: true
+      price_information__margin_data__margin_price:
+        data_type: double
+        nullable: true
+      price_information__margin_data__margin_percent:
+        data_type: double
+        nullable: true
+      price_information__margin_data__price_margin_fixed:
+        data_type: bool
+        nullable: true
+      price_information__nice_price_data__price:
+        data_type: bigint
+        nullable: true
+      price_information__price_data__price:
+        data_type: bigint
+        nullable: true
+      price_information__previous_price_data:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      price_information__discount_data__price:
+        data_type: bigint
+        nullable: true
+      price_information__discount_data__is_discounted:
+        data_type: bool
+        nullable: true
+      price_information__discount_data__last_price_change:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      price_score__similar_cars_count:
+        data_type: bigint
+        nullable: true
+      price_score__uniform_price_percentile_level:
+        data_type: bigint
+        nullable: true
+      price_score__pp_level:
+        data_type: bigint
+        nullable: true
+      price:
+        data_type: bigint
+        nullable: true
+      total_price:
+        data_type: bigint
+        nullable: true
+      exact_price:
+        data_type: bigint
+        nullable: true
+      vat_reclaimable:
+        data_type: bool
+        nullable: true
+      price_currency__id:
+        data_type: bigint
+        nullable: true
+      price_currency__name:
+        data_type: text
+        nullable: true
+      price_currency__const_key:
+        data_type: text
+        nullable: true
+      original_currency__id:
+        data_type: text
+        nullable: true
+      power_hp:
+        data_type: bigint
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      seller__rating_average__v_double:
+        data_type: double
+        nullable: true
+        variant: true
+      emission__co2:
+        data_type: bigint
+        nullable: true
+      emission__co2_class:
+        data_type: text
+        nullable: true
+      emission__co2_cost_annual_high:
+        data_type: bigint
+        nullable: true
+      emission__co2_cost_annual_low:
+        data_type: double
+        nullable: true
+      emission__co2_cost_annual_medium:
+        data_type: double
+        nullable: true
+      emission__co2_energy_cost_annual:
+        data_type: bigint
+        nullable: true
+      emission__fuel_consumption:
+        data_type: double
+        nullable: true
+      emission__vehicle_tax_de:
+        data_type: bigint
+        nullable: true
+      emission__consumption_hybrid_kwh_100_km:
+        data_type: double
+        nullable: true
+      price_information__nice_price_data__price_without_vat:
+        nullable: true
+        data_type: bigint
+      price_information__price_data__vat_rate:
+        nullable: true
+        data_type: bigint
+      price_information__price_data__price_without_vat:
+        nullable: true
+        data_type: bigint
+      price_information__discount_data__vat_rate:
+        nullable: true
+        data_type: bigint
+      price_information__discount_data__price_without_vat:
+        nullable: true
+        data_type: bigint
+      price_information__discount_data__discount_date:
+        nullable: true
+        data_type: text
+      price_without_vat:
+        nullable: true
+        data_type: bigint
+      vat_rate:
+        nullable: true
+        data_type: bigint
+      exact_price_without_vat:
+        nullable: true
+        data_type: bigint
+      emission__co2_cost_annual_high__v_double:
+        data_type: double
+        nullable: true
+        variant: true
+      weight:
+        nullable: true
+        data_type: bigint
+      number_of_gears:
+        nullable: true
+        data_type: bigint
+      origin_country__id:
+        data_type: text
+        nullable: true
+      origin_country__const_key:
+        data_type: text
+        nullable: true
+      origin_country__name:
+        data_type: text
+        nullable: true
+      origin_country__iso_code:
+        data_type: text
+        nullable: true
+      fuel_consumption_extra_urban:
+        nullable: true
+        data_type: bigint
+      fuel_consumption_extra_urban__v_double:
+        data_type: double
+        nullable: true
+        variant: true
+      vin:
+        nullable: true
+        data_type: text
+      uniform_price__v_double:
+        data_type: double
+        nullable: true
+        variant: true
+      fuel_consumption_urban:
+        nullable: true
+        data_type: double
+      warranty_date:
+        nullable: true
+        data_type: text
+      number_of_airbags:
+        nullable: true
+        data_type: bigint
+      seller__email:
+        nullable: true
+        data_type: text
+    write_disposition: merge
+    resource: listedcars
+    x-normalizer:
+      seen-data: true
+  _dlt_pipeline_state:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      pipeline_name:
+        data_type: text
+        nullable: false
+      state:
+        data_type: text
+        nullable: false
+      created_at:
+        data_type: timestamp
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    file_format: preferred
+    resource: _dlt_pipeline_state
+    x-normalizer:
+      seen-data: true
+  listedcars__advertising_rules:
+    columns:
+      uuid:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+    parent: listedcars
+    x-normalizer:
+      seen-data: true
+  listedcars__catalog_features:
+    columns:
+      const_key:
+        data_type: text
+        nullable: true
+      label:
+        data_type: text
+        nullable: true
+      seo_label:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      category:
+        data_type: text
+        nullable: true
+        x-normalizer: {}
+      category_label:
+        data_type: text
+        nullable: true
+        x-normalizer: {}
+      parent:
+        data_type: text
+        nullable: true
+        x-normalizer: {}
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+    parent: listedcars
+    x-normalizer:
+      seen-data: true
+  listedcars__vehicle_tags:
+    columns:
+      const_key:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+    parent: listedcars
+    x-normalizer:
+      seen-data: true
+  listedcars__images:
+    columns:
+      id:
+        data_type: bigint
+        nullable: true
+      path:
+        data_type: text
+        nullable: true
+      ordering:
+        data_type: bigint
+        nullable: true
+      ordering_computed:
+        data_type: bigint
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+    parent: listedcars
+    x-normalizer:
+      seen-data: true
+  listedcars__price_score__uniform_price_percentiles:
+    columns:
+      value:
+        data_type: bigint
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+    parent: listedcars
+    x-normalizer:
+      seen-data: true
+settings:
+  detections:
+  - iso_timestamp
+  default_hints:
+    not_null:
+    - _dlt_id
+    - _dlt_root_id
+    - _dlt_parent_id
+    - _dlt_list_idx
+    - _dlt_load_id
+    parent_key:
+    - _dlt_parent_id
+    root_key:
+    - _dlt_root_id
+    unique:
+    - _dlt_id
+    row_key:
+    - _dlt_id
+normalizers:
+  names: snake_case
+  json:
+    module: dlt.common.normalizers.json.relational
+    config:
+      propagation:
+        tables:
+          listedcars:
+            _dlt_id: _dlt_root_id
+previous_hashes:
+- RAP6bqbxhfkIn6Dfr2Z0bNAk+WDWMK7imL89cOsfmW8=
+- gdmjLbquhzYpvT/QEwe9pVRY67/RaR87ljuIsLAqJZE=
+- X6IkD2a+rb8xJn7rrUplLQMj+kzfBL/LUuHPr8XtMkg=
+- gGYTSDoq1lIN/zkWg+UPGuK3L0sYnIxwYH3bwJE11LI=
+- 2uw89GgNwwd9E/csUhcqVtXLL1v94K3KjIHs1qvn4ZY=
+- ZZR30Ds9kn+yucw2qk5PRVL42wuE0oIm2GiXNiXVYNI=
