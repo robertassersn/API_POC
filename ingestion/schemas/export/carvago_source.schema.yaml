@@ -1,5 +1,5 @@
-version: 6
-version_hash: RLcHeAl2OyYIMFD/ycaIMw81+jlxyx2ZlEy84uGGPWQ=
+version: 4
+version_hash: ToTerIbAuRd0acq+uW05gndNy+jsWZde6pau9nXlAAE=
 engine_version: 11
 name: carvago_source
 tables:
@@ -80,6 +80,12 @@ tables:
       power_unit:
         data_type: text
         nullable: true
+      weight:
+        data_type: bigint
+        nullable: true
+      number_of_gears:
+        data_type: bigint
+        nullable: true
       carbon_dioxide_emission:
         data_type: bigint
         nullable: true
@@ -93,15 +99,6 @@ tables:
         data_type: bigint
         nullable: true
       manufactured_from__timezone:
-        data_type: text
-        nullable: true
-      manufactured_to__date:
-        data_type: timestamp
-        nullable: true
-      manufactured_to__timezone_type:
-        data_type: bigint
-        nullable: true
-      manufactured_to__timezone:
         data_type: text
         nullable: true
       number_of_cylinders:
@@ -132,19 +129,22 @@ tables:
       number_of_owners:
         data_type: bigint
         nullable: true
+      origin_country__id:
+        data_type: text
+        nullable: true
+      origin_country__const_key:
+        data_type: text
+        nullable: true
+      origin_country__name:
+        data_type: text
+        nullable: true
+      origin_country__iso_code:
+        data_type: text
+        nullable: true
       last_registration_country:
         nullable: true
         x-normalizer:
           seen-null-first: true
-      technical_inspection_valid_to__date:
-        data_type: timestamp
-        nullable: true
-      technical_inspection_valid_to__timezone_type:
-        data_type: bigint
-        nullable: true
-      technical_inspection_valid_to__timezone:
-        data_type: text
-        nullable: true
       export_advantage:
         nullable: true
         x-normalizer:
@@ -324,6 +324,30 @@ tables:
       vehicle_class:
         data_type: text
         nullable: true
+      emission__co2:
+        data_type: bigint
+        nullable: true
+      emission__co2_class:
+        data_type: text
+        nullable: true
+      emission__co2_cost_annual_high:
+        data_type: bigint
+        nullable: true
+      emission__co2_cost_annual_low:
+        data_type: double
+        nullable: true
+      emission__co2_cost_annual_medium:
+        data_type: double
+        nullable: true
+      emission__co2_energy_cost_annual:
+        data_type: bigint
+        nullable: true
+      emission__fuel_consumption:
+        data_type: double
+        nullable: true
+      emission__vehicle_tax_de:
+        data_type: bigint
+        nullable: true
       image__id:
         data_type: bigint
         nullable: true
@@ -360,7 +384,16 @@ tables:
       price_information__nice_price_data__price:
         data_type: bigint
         nullable: true
+      price_information__nice_price_data__price_without_vat:
+        data_type: bigint
+        nullable: true
       price_information__price_data__price:
+        data_type: bigint
+        nullable: true
+      price_information__price_data__vat_rate:
+        data_type: bigint
+        nullable: true
+      price_information__price_data__price_without_vat:
         data_type: bigint
         nullable: true
       price_information__previous_price_data:
@@ -368,6 +401,12 @@ tables:
         x-normalizer:
           seen-null-first: true
       price_information__discount_data__price:
+        data_type: bigint
+        nullable: true
+      price_information__discount_data__vat_rate:
+        data_type: bigint
+        nullable: true
+      price_information__discount_data__price_without_vat:
         data_type: bigint
         nullable: true
       price_information__discount_data__is_discounted:
@@ -389,10 +428,19 @@ tables:
       price:
         data_type: bigint
         nullable: true
+      price_without_vat:
+        data_type: bigint
+        nullable: true
       total_price:
         data_type: bigint
         nullable: true
+      vat_rate:
+        data_type: bigint
+        nullable: true
       exact_price:
+        data_type: bigint
+        nullable: true
+      exact_price_without_vat:
         data_type: bigint
         nullable: true
       vat_reclaimable:
@@ -421,113 +469,64 @@ tables:
         nullable: false
         unique: true
         row_key: true
-      seller__rating_average__v_double:
-        data_type: double
+      manufactured_to__date:
+        data_type: timestamp
         nullable: true
-        variant: true
-      emission__co2:
+      manufactured_to__timezone_type:
         data_type: bigint
         nullable: true
-      emission__co2_class:
+      manufactured_to__timezone:
         data_type: text
         nullable: true
-      emission__co2_cost_annual_high:
-        data_type: bigint
-        nullable: true
-      emission__co2_cost_annual_low:
-        data_type: double
-        nullable: true
-      emission__co2_cost_annual_medium:
-        data_type: double
-        nullable: true
-      emission__co2_energy_cost_annual:
-        data_type: bigint
-        nullable: true
-      emission__fuel_consumption:
-        data_type: double
-        nullable: true
-      emission__vehicle_tax_de:
-        data_type: bigint
-        nullable: true
-      emission__consumption_hybrid_kwh_100_km:
-        data_type: double
-        nullable: true
-      price_information__nice_price_data__price_without_vat:
-        nullable: true
-        data_type: bigint
-      price_information__price_data__vat_rate:
-        nullable: true
-        data_type: bigint
-      price_information__price_data__price_without_vat:
-        nullable: true
-        data_type: bigint
-      price_information__discount_data__vat_rate:
-        nullable: true
-        data_type: bigint
-      price_information__discount_data__price_without_vat:
-        nullable: true
-        data_type: bigint
-      price_information__discount_data__discount_date:
-        nullable: true
-        data_type: text
-      price_without_vat:
-        nullable: true
-        data_type: bigint
-      vat_rate:
-        nullable: true
-        data_type: bigint
-      exact_price_without_vat:
-        nullable: true
-        data_type: bigint
       emission__co2_cost_annual_high__v_double:
         data_type: double
         nullable: true
         variant: true
-      weight:
-        nullable: true
-        data_type: bigint
-      number_of_gears:
-        nullable: true
-        data_type: bigint
-      origin_country__id:
-        data_type: text
-        nullable: true
-      origin_country__const_key:
-        data_type: text
-        nullable: true
-      origin_country__name:
-        data_type: text
-        nullable: true
-      origin_country__iso_code:
-        data_type: text
-        nullable: true
-      fuel_consumption_extra_urban:
-        nullable: true
-        data_type: bigint
-      fuel_consumption_extra_urban__v_double:
+      seller__rating_average__v_double:
         data_type: double
         nullable: true
         variant: true
+      technical_inspection_valid_to__date:
+        data_type: timestamp
+        nullable: true
+      technical_inspection_valid_to__timezone_type:
+        data_type: bigint
+        nullable: true
+      technical_inspection_valid_to__timezone:
+        data_type: text
+        nullable: true
+      price_information__discount_data__discount_date:
+        nullable: true
+        data_type: text
+      emission__consumption_hybrid_kwh_100_km:
+        nullable: true
+        data_type: double
       vin:
         nullable: true
         data_type: text
+      fuel_consumption_urban:
+        nullable: true
+        data_type: double
       uniform_price__v_double:
         data_type: double
         nullable: true
         variant: true
-      fuel_consumption_urban:
+      fuel_consumption_extra_urban:
         nullable: true
         data_type: double
-      warranty_date:
-        nullable: true
-        data_type: text
       number_of_airbags:
         nullable: true
         data_type: bigint
       seller__email:
         nullable: true
         data_type: text
-    write_disposition: merge
+      warranty_date:
+        nullable: true
+        data_type: text
+      job_id:
+        data_type: text
+        nullable: true
+    write_disposition: replace
     resource: listedcars
     x-normalizer:
       seen-data: true
@@ -582,10 +581,6 @@ tables:
         nullable: false
         unique: true
         row_key: true
-      _dlt_root_id:
-        data_type: text
-        nullable: false
-        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -624,10 +619,6 @@ tables:
         data_type: text
         nullable: true
         x-normalizer: {}
-      _dlt_root_id:
-        data_type: text
-        nullable: false
-        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -648,10 +639,6 @@ tables:
         nullable: false
         unique: true
         row_key: true
-      _dlt_root_id:
-        data_type: text
-        nullable: false
-        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -681,10 +668,6 @@ tables:
         nullable: false
         unique: true
         row_key: true
-      _dlt_root_id:
-        data_type: text
-        nullable: false
-        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -705,10 +688,6 @@ tables:
         nullable: false
         unique: true
         row_key: true
-      _dlt_root_id:
-        data_type: text
-        nullable: false
-        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -734,15 +713,8 @@ normalizers:
   names: snake_case
   json:
     module: dlt.common.normalizers.json.relational
-    config:
-      propagation:
-        tables:
-          listedcars:
-            _dlt_id: _dlt_root_id
 previous_hashes:
-- RAP6bqbxhfkIn6Dfr2Z0bNAk+WDWMK7imL89cOsfmW8=
-- gdmjLbquhzYpvT/QEwe9pVRY67/RaR87ljuIsLAqJZE=
-- X6IkD2a+rb8xJn7rrUplLQMj+kzfBL/LUuHPr8XtMkg=
-- gGYTSDoq1lIN/zkWg+UPGuK3L0sYnIxwYH3bwJE11LI=
+- DhMS0VwQIUdynn3xC0zg5owr4OUH4bd6bVc/i1bjy2c=
+- ZTXBwSnE3PYshnE+2F36WdfYqmvRTX1ihn2wvIxHQho=
 - 2uw89GgNwwd9E/csUhcqVtXLL1v94K3KjIHs1qvn4ZY=
 - ZZR30Ds9kn+yucw2qk5PRVL42wuE0oIm2GiXNiXVYNI=

@@ -1,0 +1,54 @@
+import dlt
+import dlt
+import sys
+import os
+import logging
+from dlt.common.pipeline import get_dlt_pipelines_dir
+
+logger = logging.getLogger(__name__)
+# dlt.config["runtime.log_level"] = "WARNING"
+base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(base_path)
+from project_files import functions
+from ingestion.sources.carvago import carvago_source
+import logging
+from datetime import datetime
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+dlt_logger = logging.getLogger("dlt")
+dlt_logger.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler(f"ingestion/pipelines/logs/carvago_to_filesystem_{timestamp}.log")
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(logging.Formatter(
+    "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
+))
+dlt_logger.addHandler(file_handler)
+config_dictionary = functions.read_config_segment()
+destination_raw = dlt.destinations.filesystem(bucket_url=config_dictionary['CARVAGO_TRENDS_DIR_DOWNLOADED_FILES'])
+
+# source = carvago_source(country=32)
+# source.listedcars.add_map(lambda row: {**row, "job_id": 1})
+
+if __name__ == "__main__":
+    pipeline = dlt.pipeline(
+        pipeline_name="carvago_to_filesystem",
+        export_schema_path="ingestion/schemas/export",
+        destination=destination_raw,
+        dataset_name="carvago"
+    )
+
+    load_info = pipeline.run(
+        carvago_source(
+            job_id=str(1),
+            # country=32,
+            make="MAKE_LAND_ROVER"
+            # mileage_from=2500,
+            # mileage_to=200000,
+            # power_from=25,
+            # power_to=296,
+            # price_from=4000,
+            # registration_date_from=2006,
+            # registration_date_to=2026
+        )
+        , write_disposition="replace"
+    )
