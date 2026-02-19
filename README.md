@@ -17,7 +17,6 @@ examples to provide
 - metadata passage
 - provide sample of logs
 - provide means to easily reset schema, e.g column renaming from api side
-
 - orchestration in airflow using proper commands
 
 Topics 
@@ -26,3 +25,6 @@ Topics
 - API
 - authentication
 - reverse ETL
+- terminal commands vs script run, info provided by terminal commands
+- Means of quality assurance besides schema validation
+
