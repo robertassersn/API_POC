@@ -18,6 +18,7 @@ examples to provide
 - provide sample of logs
 - provide means to easily reset schema, e.g column renaming from api side
 - orchestration in airflow using proper commands
+- means of output format control
 
 Topics 
 - sftp to DB
@@ -27,4 +28,5 @@ Topics
 - reverse ETL
 - terminal commands vs script run, info provided by terminal commands
 - Means of quality assurance besides schema validation
+- explain how to interpret metadata 
 
