@@ -19,3 +19,10 @@ examples to provide
 - provide means to easily reset schema, e.g column renaming from api side
 
 - orchestration in airflow using proper commands
+
+Topics 
+- sftp to DB
+- DB to SFTP
+- API
+- authentication
+- reverse ETL
