@@ -8,6 +8,7 @@ possibility to insert additional metadata columns on demand so sync with externa
 
 Qs
 - pipeline stoppage possibility in case of schema change
+- examples how very dynamic pipelines get structured
 
 examples to provide
 - retention of original format
