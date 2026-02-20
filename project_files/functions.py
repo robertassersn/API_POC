@@ -27,19 +27,6 @@ _config_parser=None
 
 logger = logging.getLogger(__name__)
 
-def cleanup_old_logs(log_dir, days_to_keep=10):
-    cutoff_time = datetime.now() - timedelta(days=days_to_keep)
-    
-    for filename in os.listdir(log_dir):
-        file_path = os.path.join(log_dir, filename)
-        
-        if filename.endswith(".log"):  # Ensure we're only handling log files
-            file_creation_time = datetime.fromtimestamp(os.path.getctime(file_path))
-            
-            if file_creation_time < cutoff_time:
-                os.remove(file_path)  # Delete old log file
-                logging.info(f"Deleted old log file: {filename}")
-
 def get_current_date():
     return date.today().strftime("%Y-%m-%d")
 
@@ -146,40 +133,7 @@ def get_connection(connection_type):
 import os
 import csv
 import json
-
-
-def save_output_to_file(data, directory, filename, file_type):
-    """
-    Save data to file in specified format.
     
-    Args:
-        data: List of timeline data from API
-        directory: Directory path to save file
-        filename: Name of file (without extension)
-        file_type: 'csv' or 'json'
-    
-    Returns:
-        Full path to saved file
-    """
-    os.makedirs(directory, exist_ok=True)
-    file_type = file_type.lower()
-    filepath = os.path.join(directory, f"{filename}.{file_type}")
-
-    # Use lambdas to defer execution
-    FILE_TYPES = {
-        "csv": lambda: save_as_csv(data, filepath),
-        "json": lambda: save_as_json(data, filepath)
-    }
-    
-    try:
-        if file_type not in FILE_TYPES:
-            raise ValueError(f"Unsupported file type: {file_type}. Use 'csv' or 'json'.")
-        FILE_TYPES[file_type]()
-        return filepath
-    except Exception as e:
-        raise RuntimeError(f"save_output_to_file function failed:\n ERROR: {e}")
-    
-
 def get_cli_args(defaults = None):
     parser = argparse.ArgumentParser()
     args,unknown = parser.parse_known_args()
@@ -195,3 +149,49 @@ def get_cli_args(defaults = None):
 
     return arg_dict
 
+
+import logging
+import os
+from datetime import datetime
+from functools import wraps
+
+
+def with_logging(log_dir: str = "logs", level: int = logging.DEBUG):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            os.makedirs(log_dir, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            file_handler = logging.FileHandler(
+                f"{log_dir}/{func.__name__}_{timestamp}.log"
+            )
+            file_handler.setLevel(level)
+            file_handler.setFormatter(logging.Formatter(
+                "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
+            ))
+
+            # attach to root
+            root_logger = logging.getLogger()
+            root_logger.setLevel(level)
+            root_logger.addHandler(file_handler)
+
+            # explicitly attach to dlt loggers
+            for name in logging.root.manager.loggerDict:
+                if name.startswith("dlt"):
+                    l = logging.getLogger(name)
+                    l.setLevel(level)
+                    l.propagate = True
+                    l.addHandler(file_handler)
+
+            try:
+                return func(*args, **kwargs)
+            finally:
+                file_handler.close()
+                root_logger.removeHandler(file_handler)
+                for name in logging.root.manager.loggerDict:
+                    if name.startswith("dlt"):
+                        logging.getLogger(name).removeHandler(file_handler)
+
+        return wrapper
+    return decorator
