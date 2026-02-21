@@ -3,6 +3,20 @@
 provide a template for data ingestion, template can fluctuate on demand, therefore provide coverage examples for various scenarios that company can adapt.
 Template must be easy to understand and causes ease in further development.
 
+**pipeline algorithm:**
+https://dlthub.com/docs/reference/explainers/how-dlt-works
+
+**ingestion pipelines can be found at:**
+/ingestion/pipelines/
+
+**carvago_to_filesystem_example.py** provides example how to load files into filesystem
+**carvago_to_postgresql_example.py** provides examples how to load files into database (in current example Postgresql)
+
+**Limitations**:
+- DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
+
+
+
 ### Assumptions
 - Colleagues must understand python language, have ability to install python packages, read and understand python packages on demand on high level.
 - Understandent of .env and .conf file usage
@@ -16,8 +30,6 @@ Template must be easy to understand and causes ease in further development.
 
 ### DRAFT NOTES
 
-pipeline algorithm:
-https://dlthub.com/docs/reference/explainers/how-dlt-works
 
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
 
