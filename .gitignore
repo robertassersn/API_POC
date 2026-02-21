@@ -22,8 +22,6 @@ airflow-docker/
 
 .dlt/*
 
-parameters/*
-!parameters/job_parameters_example.conf
 # secrets and credentials
 secrets.toml
 *.secrets.toml
@@ -230,3 +228,4 @@ __marimo__/
 # macOS
 .DS_Store
 config/parameters/job_parameters.conf
+parameters/job_parameters.conf
