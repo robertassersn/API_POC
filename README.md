@@ -19,6 +19,8 @@ Template must be easy to understand and causes ease in further development.
 pipeline algorithm:
 https://dlthub.com/docs/reference/explainers/how-dlt-works
 
+- DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
+
 possibility to insert additional metadata columns on demand so sync with external processes
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
