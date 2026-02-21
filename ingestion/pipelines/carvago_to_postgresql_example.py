@@ -3,36 +3,40 @@ import dlt
 import sys
 import os
 import logging
+import json
 from dlt.common.pipeline import get_dlt_pipelines_dir
 logger = logging.getLogger(__name__)
-dlt.config["runtime.log_level"] = "WARNING"
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from ingestion.sources.carvago import carvago_source
 from ingestion.config.base_config import get_pg_credentials
 import logging
-logging.basicConfig(level=logging.INFO)
-source = carvago_source(country=32)
-source.listedcars.add_map(lambda row: {**row, "job_id": 1})
+
+base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(base_path)
+from project_files import functions
+from ingestion.sources.carvago import carvago_source
+from ingestion.config.base_config import run_dlt_pipeline
+
+destination=dlt.destinations.postgres(credentials=get_pg_credentials())
+DATASOURCE = 'CARVAGO'
+PIPELINE_NAME = 'carvago_to_postgresql'
+config_dictionary = functions.read_config_segment(segment=DATASOURCE)
+PIPELINE_RUN_PARAMETERS = json.loads(
+    config_dictionary['RUN_CONFIGS']
+    )
+
+pipeline = run_dlt_pipeline(
+    pipeline_name=PIPELINE_NAME,
+    source_func=lambda **p: carvago_source(job_id=1,  **p),
+    run_parameters=PIPELINE_RUN_PARAMETERS,
+    destination=destination,
+    dataset_name=DATASOURCE,
+    export_schema_path=config_dictionary['DLT_SOURCE_SCHEMA_DIR'],
+    log_dir=config_dictionary['DLT_PIPELINE_LOGS_DIR'],
+    write_disposition = 'merge'
+    # write disposition docs: https://dlthub.com/docs/general-usage/incremental-loading
+)
 
 if __name__ == "__main__":
-    pipeline = dlt.pipeline(
-        pipeline_name="carvago_to_postgres",
-        export_schema_path="ingestion/schemas/export",
-        destination=dlt.destinations.postgres(credentials=get_pg_credentials()),
-        dataset_name="carvago",
-    )
-
-    load_info = pipeline.run(
-        carvago_source(
-            # country=32,
-            make="MAKE_LAND_ROVER"
-            # mileage_from=2500,
-            # mileage_to=200000,
-            # power_from=25,
-            # power_to=296,
-            # price_from=4000,
-            # registration_date_from=2006,
-            # registration_date_to=2026
-        )
-    )
+    pipeline

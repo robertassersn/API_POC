@@ -1,5 +1,5 @@
-version: 5
-version_hash: AH+N3e9RB8vc8yW0WmHBgREynOcoUaScvk3ZMfNPr9Y=
+version: 6
+version_hash: Jqw2k8IbimsAUr9JEuFY8JdUxfJGMA4Z1Y58wNgH7GA=
 engine_version: 11
 name: carvago_source
 tables:
@@ -157,6 +157,10 @@ tables:
         nullable: true
         x-normalizer:
           seen-null-first: true
+      warranty_date:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
       source_created_at:
         data_type: text
         nullable: true
@@ -285,6 +289,10 @@ tables:
         nullable: true
         x-normalizer:
           seen-null-first: true
+      delisted_at:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
       external_id:
         data_type: text
         nullable: true
@@ -323,11 +331,8 @@ tables:
       emission__co2:
         data_type: bigint
         nullable: true
-      emission__co2_class:
-        data_type: text
-        nullable: true
       emission__co2_cost_annual_high:
-        data_type: bigint
+        data_type: double
         nullable: true
       emission__co2_cost_annual_low:
         data_type: double
@@ -343,6 +348,9 @@ tables:
         nullable: true
       emission__vehicle_tax_de:
         data_type: bigint
+        nullable: true
+      emission__consumption_hybrid_kwh_100_km:
+        data_type: double
         nullable: true
       image__id:
         data_type: bigint
@@ -408,6 +416,9 @@ tables:
       price_information__discount_data__is_discounted:
         data_type: bool
         nullable: true
+      price_information__discount_data__discount_date:
+        data_type: text
+        nullable: true
       price_information__discount_data__last_price_change:
         nullable: true
         x-normalizer:
@@ -457,6 +468,9 @@ tables:
       power_hp:
         data_type: bigint
         nullable: true
+      job_id:
+        data_type: bigint
+        nullable: true
       _dlt_load_id:
         data_type: text
         nullable: false
@@ -465,6 +479,9 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      emission__co2_class:
+        nullable: true
+        data_type: text
       manufactured_to__date:
         data_type: timestamp
         nullable: true
@@ -474,10 +491,6 @@ tables:
       manufactured_to__timezone:
         data_type: text
         nullable: true
-      emission__co2_cost_annual_high__v_double:
-        data_type: double
-        nullable: true
-        variant: true
       seller__rating_average__v_double:
         data_type: double
         nullable: true
@@ -491,47 +504,26 @@ tables:
       technical_inspection_valid_to__timezone:
         data_type: text
         nullable: true
-      price_information__discount_data__discount_date:
+      fuel_consumption_extra_urban:
         nullable: true
-        data_type: text
-      emission__consumption_hybrid_kwh_100_km:
-        nullable: true
-        data_type: double
-      vin:
-        nullable: true
-        data_type: text
-      fuel_consumption_urban:
-        nullable: true
-        data_type: double
-      uniform_price__v_double:
+        data_type: bigint
+      fuel_consumption_extra_urban__v_double:
         data_type: double
         nullable: true
         variant: true
-      fuel_consumption_extra_urban:
+      vin:
         nullable: true
-        data_type: double
+        data_type: text
       number_of_airbags:
         nullable: true
         data_type: bigint
       seller__email:
         nullable: true
         data_type: text
-      warranty_date:
+      fuel_consumption_urban:
         nullable: true
-        data_type: text
-      job_id:
-        data_type: text
-        nullable: true
-      delisted_at__date:
-        data_type: timestamp
-        nullable: true
-      delisted_at__timezone_type:
-        data_type: bigint
-        nullable: true
-      delisted_at__timezone:
-        data_type: text
-        nullable: true
-    write_disposition: replace
+        data_type: double
+    write_disposition: merge
     resource: listedcars
     x-normalizer:
       seen-data: true
@@ -586,6 +578,10 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -624,6 +620,10 @@ tables:
         data_type: text
         nullable: true
         x-normalizer: {}
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -644,6 +644,10 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -673,6 +677,10 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -693,6 +701,10 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
     parent: listedcars
     x-normalizer:
       seen-data: true
@@ -718,9 +730,15 @@ normalizers:
   names: snake_case
   json:
     module: dlt.common.normalizers.json.relational
+    config:
+      propagation:
+        tables:
+          listedcars:
+            _dlt_id: _dlt_root_id
 previous_hashes:
-- ToTerIbAuRd0acq+uW05gndNy+jsWZde6pau9nXlAAE=
-- DhMS0VwQIUdynn3xC0zg5owr4OUH4bd6bVc/i1bjy2c=
-- ZTXBwSnE3PYshnE+2F36WdfYqmvRTX1ihn2wvIxHQho=
-- 2uw89GgNwwd9E/csUhcqVtXLL1v94K3KjIHs1qvn4ZY=
-- ZZR30Ds9kn+yucw2qk5PRVL42wuE0oIm2GiXNiXVYNI=
+- kqZlyaPHDMsBeanWdSwvh19KE2ffCfNz3bqoHlBm63E=
+- E/6xyRei1wgkP2n6DOZfHOtJqPC381gf/wIxzVrIBhk=
+- L5aErDod9Ku2euGEHnWDf1z4X8Xa48PARBxBABFtiRc=
+- x8+rCRqebnhPcYeOQ6kFF/rrjgdQ3x2NZFvSQ1u4G9g=
+- rNc7lA+Lp4Q/C9RH65bH4xH4tXm96iiteJCetvEWRq4=
+- +K4JTptvkL4WWH7yeFKslEZjpNaLcQoLlmxuHPfOcDk=
