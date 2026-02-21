@@ -1,5 +1,5 @@
-version: 4
-version_hash: ToTerIbAuRd0acq+uW05gndNy+jsWZde6pau9nXlAAE=
+version: 5
+version_hash: AH+N3e9RB8vc8yW0WmHBgREynOcoUaScvk3ZMfNPr9Y=
 engine_version: 11
 name: carvago_source
 tables:
@@ -285,10 +285,6 @@ tables:
         nullable: true
         x-normalizer:
           seen-null-first: true
-      delisted_at:
-        nullable: true
-        x-normalizer:
-          seen-null-first: true
       external_id:
         data_type: text
         nullable: true
@@ -526,6 +522,15 @@ tables:
       job_id:
         data_type: text
         nullable: true
+      delisted_at__date:
+        data_type: timestamp
+        nullable: true
+      delisted_at__timezone_type:
+        data_type: bigint
+        nullable: true
+      delisted_at__timezone:
+        data_type: text
+        nullable: true
     write_disposition: replace
     resource: listedcars
     x-normalizer:
@@ -714,6 +719,7 @@ normalizers:
   json:
     module: dlt.common.normalizers.json.relational
 previous_hashes:
+- ToTerIbAuRd0acq+uW05gndNy+jsWZde6pau9nXlAAE=
 - DhMS0VwQIUdynn3xC0zg5owr4OUH4bd6bVc/i1bjy2c=
 - ZTXBwSnE3PYshnE+2F36WdfYqmvRTX1ihn2wvIxHQho=
 - 2uw89GgNwwd9E/csUhcqVtXLL1v94K3KjIHs1qvn4ZY=
