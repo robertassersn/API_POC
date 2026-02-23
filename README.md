@@ -34,7 +34,10 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
 - Logging included in template proposal
-  <img width="1335" height="611" alt="image" src="https://github.com/user-attachments/assets/76a88f9e-00b3-4478-a27e-2e915a89fdb4" />
+<img width="1335" height="611" alt="image" src="https://github.com/user-attachments/assets/76a88f9e-00b3-4478-a27e-2e915a89fdb4" />
+
+- tracking of historical pipeline runs
+<img width="668" height="160" alt="image" src="https://github.com/user-attachments/assets/fca0ad53-5f40-4ba5-9ccf-e9483b52ca60" />
 
 
 ### DRAFT NOTES
