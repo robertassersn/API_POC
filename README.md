@@ -54,6 +54,9 @@ RAW response example (CARVAGO)
 - Possbility to avoid duplication from source by defining API output Primary key + write disposition that controls loading behavior of job
 <img width="859" height="240" alt="image" src="https://github.com/user-attachments/assets/3fd385ef-67c9-44d5-86ce-02d8619d12b9" />
 
+- Library supports creating table's on its own. Meaning with enough permissions it can create schema + tables required to insert data
+<img width="810" height="490" alt="image" src="https://github.com/user-attachments/assets/613eb827-4441-4850-8691-2735b752f310" />
+
 
 ### DRAFT NOTES
 
