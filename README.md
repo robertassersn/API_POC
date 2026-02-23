@@ -39,6 +39,9 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 - tracking of historical pipeline runs
 <img width="668" height="160" alt="image" src="https://github.com/user-attachments/assets/fca0ad53-5f40-4ba5-9ccf-e9483b52ca60" />
 
+- Possbility to avoid duplication from source by defining API output Primary key + write disposition that controls loading behavior of job
+<img width="859" height="240" alt="image" src="https://github.com/user-attachments/assets/3fd385ef-67c9-44d5-86ce-02d8619d12b9" />
+
 
 ### DRAFT NOTES
 
