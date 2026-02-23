@@ -3,6 +3,8 @@
 provide a template for data ingestion, template can fluctuate on demand, therefore provide coverage examples for various scenarios that company can adapt.
 Template must be easy to understand and causes ease in further development.
 
+- jobs are parametrized, therefore you'll need to create and fill config file using example from /parameters/job_parameters _example.conf
+
 **pipeline algorithm:**
 https://dlthub.com/docs/reference/explainers/how-dlt-works
 
