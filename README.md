@@ -23,7 +23,7 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 - I'm restricted to using .env and .conf files together (cannot use only single type)
 
 ### Prerequisites
-- install python packages from requirements.txt (need to update file)
+- install python packages from requirements.txt
 - create and fill parameters file in parameters directory according to example
 - create and fill .env file according to provided example
 
