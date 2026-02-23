@@ -15,13 +15,17 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 **carvago_to_postgresql_example.py** provides examples how to load files into database (in current example Postgresql)
 
 
-RAW response example (CARVAGO)
-<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
-
 
 
 **Limitations**:
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
+RAW response example (CARVAGO)
+<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+Output example:
+<img width="709" height="432" alt="image" src="https://github.com/user-attachments/assets/9930fabd-1a5d-43f5-9052-ca1a1e1c2cfa" />
+Single file is normalized into multiple tables according to their grain, but keeps parent_ids via metadata columns. 
+<img width="678" height="401" alt="image" src="https://github.com/user-attachments/assets/c1961b5c-d956-4e2b-bf11-3c7a43a1ff0d" />
+
 
 
 
