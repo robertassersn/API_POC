@@ -14,6 +14,12 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 **carvago_to_filesystem_example.py** provides example how to load files into filesystem
 **carvago_to_postgresql_example.py** provides examples how to load files into database (in current example Postgresql)
 
+
+RAW response example (CARVAGO)
+<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+
+
+
 **Limitations**:
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
 
