@@ -27,17 +27,17 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 - create and fill parameters file in parameters directory according to example
 - create and fill .env file according to provided example
 
+### Features
+- possibility to insert additional metadata columns on demand so sync with external processes
+<img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
+
+- Logging included in template proposal
+  <img width="1335" height="611" alt="image" src="https://github.com/user-attachments/assets/76a88f9e-00b3-4478-a27e-2e915a89fdb4" />
+
 
 ### DRAFT NOTES
 
 
-- DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
-
-possibility to insert additional metadata columns on demand so sync with external processes
-<img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
-
-TODO:
-- update requirements.txt
 
 Qs
 - pipeline stoppage possibility in case of schema change
