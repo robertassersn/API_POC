@@ -14,6 +14,7 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 **carvago_to_filesystem_example.py** provides example how to load files into filesystem
 **carvago_to_postgresql_example.py** provides examples how to load files into database (in current example Postgresql)
 
+**/ingestion/sources/worldbank.py** example of datasource that yields .xml and library handles it
 
 
 
