@@ -1,5 +1,5 @@
-version: 2
-version_hash: tUhy2QwRf4vl0KSICcVanf/YTinILNzZuCLDYsRVAF0=
+version: 6
+version_hash: TaXl6vx4TEvvR9E+nODQ/MVjPkBIAxNHqvAsr+h5vig=
 engine_version: 11
 name: worldbank_source
 tables:
@@ -134,6 +134,112 @@ tables:
     resource: _dlt_pipeline_state
     x-normalizer:
       seen-data: true
+  us_ny_gdp_mktp_cd:
+    columns:
+      indicator_id:
+        data_type: text
+        nullable: true
+      indicator_text_text:
+        data_type: text
+        nullable: true
+      country_id:
+        data_type: text
+        nullable: true
+      country_text_text:
+        data_type: text
+        nullable: true
+      countryiso3code:
+        data_type: text
+        nullable: true
+      date:
+        data_type: text
+        nullable: true
+      value:
+        data_type: text
+        nullable: true
+      unit:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      obs_status:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      decimal:
+        data_type: text
+        nullable: true
+      job_id:
+        data_type: bigint
+        nullable: true
+      indicator_country_date:
+        nullable: false
+        primary_key: true
+        data_type: text
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    resource: US_NY.GDP.MKTP.CD
+    x-normalizer:
+      seen-data: true
+  us_sp_pop_totl:
+    columns:
+      indicator_id:
+        data_type: text
+        nullable: true
+      indicator_text_text:
+        data_type: text
+        nullable: true
+      country_id:
+        data_type: text
+        nullable: true
+      country_text_text:
+        data_type: text
+        nullable: true
+      countryiso3code:
+        data_type: text
+        nullable: true
+      date:
+        data_type: text
+        nullable: true
+      value:
+        data_type: text
+        nullable: true
+      unit:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      obs_status:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      decimal:
+        data_type: text
+        nullable: true
+      job_id:
+        data_type: bigint
+        nullable: true
+      indicator_country_date:
+        nullable: false
+        primary_key: true
+        data_type: text
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    resource: US_SP.POP.TOTL
+    x-normalizer:
+      seen-data: true
 settings:
   detections:
   - iso_timestamp
@@ -157,5 +263,9 @@ normalizers:
   json:
     module: dlt.common.normalizers.json.relational
 previous_hashes:
+- hT7sbt6XwD867xmM9br6SX7bYZPfdmZba6OgeMfoGco=
+- 3OS7PgCzovqkcT+GX0ltQOUftpK78Zgmyz5sOmBFtXQ=
+- odVBfvj62LaGUu+maqBrYZQjZMgVi49W+nRvHyk0v5o=
+- tUhy2QwRf4vl0KSICcVanf/YTinILNzZuCLDYsRVAF0=
 - CYGV9+SkGdH4m4i9ySbKPoxzL/mUU8rrGfNzVP47Jio=
 - 0QwHQPlmjkIMm68QkNYelSR9T9DRFWGHu8tCI3vx1Lo=

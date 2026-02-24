@@ -20,66 +20,66 @@ config_dictionary = functions.read_config_segment(segment=DATASOURCE)
 @dlt.source
 def worldbank_source(
     job_id: str,
-    country: str,
     indicator: str,
-    output_format: str,
+    country: str,
+    output_format: str = "xml",
     per_page: int = 1000,
 ):
-    @dlt.resource(name=indicator, write_disposition="merge", primary_key="indicator_country_date")
+    @dlt.resource(name=f"{country}_{indicator}", write_disposition="merge", primary_key="indicator_country_date")
     def worldbank_resource() -> Iterator[dict]:
         raw_dir = Path(config_dictionary['DIR_RAW_FILES'])
         raw_dir.mkdir(parents=True, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        raw_file = raw_dir / f"worldbank_{country}_{indicator}_{timestamp}.xml"
 
         page = 1
         total_yielded = 0
 
-        with open(raw_file, "w") as f:
-            while True:
-                url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator}"
-                params = {
-                    "format":output_format,
-                    # "per_page": per_page,
-                    # "page": page,
-                }
+        while True:
+            url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator}"
+            params = {
+                "format": output_format,
+                "per_page": per_page,
+                "page": page,
+            }
 
-                response = requests.get(url, params=params, timeout=30)
-                response.raise_for_status()
-                print('response url,',response.url)
-                parsed = xmltodict.parse(response.content)
-                root = parsed.get("wb:data", {})
+            response = requests.get(url, params=params, timeout=60)
+            response.raise_for_status()
 
-                records = root.get("wb:data", [])
-                if isinstance(records, dict):  
-                    records = [records]
+            raw_file = raw_dir / f"worldbank_{country}_{indicator}_{timestamp}_page{page}.xml"
+            with open(raw_file, "wb") as f:
+                f.write(response.content)
 
-                if not records:
-                    break
+            parsed = xmltodict.parse(response.content)
+            root = parsed.get("wb:data", {})
 
-                for record in records:
-                    row = xmltodict.parse  
-                    row = {}
-                    for key, value in record.items():
-                        clean_key = key.replace("wb:", "")
-                        if isinstance(value, dict):
-                            for subkey, subvalue in value.items():
-                                clean_subkey = subkey.replace("@", "").replace("#", "text_")
-                                row[f"{clean_key}_{clean_subkey}"] = subvalue
-                        else:
-                            row[clean_key] = value
+            records = root.get("wb:data", [])
+            if isinstance(records, dict):
+                records = [records]
 
-                    row["job_id"] = job_id
-                    row["indicator_country_date"] = f"{row.get('indicator_id')}_{row.get('country_id')}_{row.get('date')}"
+            if not records:
+                break
 
-                    f.write(response.text + "\n")
-                    yield row
-                    total_yielded += 1
+            for record in records:
+                row = {}
+                for key, value in record.items():
+                    clean_key = key.replace("wb:", "")
+                    if isinstance(value, dict):
+                        for subkey, subvalue in value.items():
+                            clean_subkey = subkey.replace("@", "").replace("#", "text_")
+                            row[f"{clean_key}_{clean_subkey}"] = subvalue
+                    else:
+                        row[clean_key] = value
 
-                total_pages = int(root.get("@pages", 1))
-                if page >= total_pages:
-                    break
+                row["job_id"] = job_id
+                row["indicator_country_date"] = f"{row.get('indicator_id')}_{row.get('country_id')}_{row.get('date')}"
 
-                page += 1
+                yield row
+                total_yielded += 1
+
+            total_pages = int(root.get("@pages", 1))
+            if page >= total_pages:
+                break
+
+            page += 1
 
     return worldbank_resource
