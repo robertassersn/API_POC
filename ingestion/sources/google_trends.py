@@ -42,10 +42,7 @@ def google_trends_source(config: dict, keywords: list[str]):
             }
             
             results = fetch_with_retry(params)
-            
-            # Save raw JSON
-            functions.save_raw_json(results, keyword, raw_json_dir=config['DIR_DOWNLOADED_FILES'])
-            
+                        
             for item in results.get("interest_over_time", {}).get("timeline_data", []):
                 yield {
                     "keyword": keyword,

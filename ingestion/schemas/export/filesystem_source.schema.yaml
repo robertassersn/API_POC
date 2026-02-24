@@ -1,0 +1,209 @@
+version: 6
+version_hash: NjMKmy2ES7QcP9Q4F5Q4o7GR588LxarBvoWvTjCbOVk=
+engine_version: 11
+name: filesystem_source
+tables:
+  _dlt_version:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_name:
+        data_type: text
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: false
+      schema:
+        data_type: text
+        nullable: false
+    write_disposition: skip
+    resource: _dlt_version
+    description: Created by DLT. Tracks schema updates
+  _dlt_loads:
+    columns:
+      load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      schema_name:
+        data_type: text
+        nullable: true
+      status:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_version_hash:
+        data_type: text
+        nullable: true
+    write_disposition: skip
+    resource: _dlt_loads
+    description: Created by DLT. Tracks completed loads
+  _dlt_pipeline_state:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      pipeline_name:
+        data_type: text
+        nullable: false
+      state:
+        data_type: text
+        nullable: false
+      created_at:
+        data_type: timestamp
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    file_format: preferred
+    resource: _dlt_pipeline_state
+    x-normalizer:
+      seen-data: true
+  us_sp_pop_totl:
+    columns:
+      indicator_id:
+        data_type: text
+        nullable: true
+      indicator_text_text:
+        data_type: text
+        nullable: true
+      country_id:
+        data_type: text
+        nullable: true
+      country_text_text:
+        data_type: text
+        nullable: true
+      countryiso3code:
+        data_type: text
+        nullable: true
+      date:
+        data_type: text
+        nullable: true
+      value:
+        data_type: text
+        nullable: true
+      decimal:
+        data_type: text
+        nullable: true
+      job_id:
+        data_type: bigint
+        nullable: true
+      indicator_country_date:
+        nullable: false
+        primary_key: true
+        data_type: text
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: merge
+    resource: us_sp_pop_totl
+    x-normalizer:
+      seen-data: true
+  us_ny_gdp_mktp_cd:
+    columns:
+      indicator_id:
+        data_type: text
+        nullable: true
+      indicator_text_text:
+        data_type: text
+        nullable: true
+      country_id:
+        data_type: text
+        nullable: true
+      country_text_text:
+        data_type: text
+        nullable: true
+      countryiso3code:
+        data_type: text
+        nullable: true
+      date:
+        data_type: text
+        nullable: true
+      value:
+        data_type: text
+        nullable: true
+      decimal:
+        data_type: text
+        nullable: true
+      job_id:
+        data_type: bigint
+        nullable: true
+      indicator_country_date:
+        nullable: false
+        primary_key: true
+        data_type: text
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: merge
+    resource: us_ny_gdp_mktp_cd
+    x-normalizer:
+      seen-data: true
+settings:
+  detections:
+  - iso_timestamp
+  default_hints:
+    not_null:
+    - _dlt_id
+    - _dlt_root_id
+    - _dlt_parent_id
+    - _dlt_list_idx
+    - _dlt_load_id
+    parent_key:
+    - _dlt_parent_id
+    root_key:
+    - _dlt_root_id
+    unique:
+    - _dlt_id
+    row_key:
+    - _dlt_id
+normalizers:
+  names: snake_case
+  json:
+    module: dlt.common.normalizers.json.relational
+    config:
+      propagation:
+        tables:
+          us_sp_pop_totl:
+            _dlt_id: _dlt_root_id
+          us_ny_gdp_mktp_cd:
+            _dlt_id: _dlt_root_id
+previous_hashes:
+- 0ExnS6kLvZhwCouz8+ILrbNdoHTl85PnPtWem5k6NYg=
+- V4KupdNVTG9SaVvvo3jJf4XB/dSrBmdNCyVPRcO/2ZA=
+- pWi9Vkl58nrrQ9ba7lwIc5SdNrrOaeodyO2B53HtRgs=
+- xA37ssG7nU+9WH+hiR2CPWGQqHAJMz3Ws49JEktLxcM=
+- 9v0XlA5lu7F2uNqESeFtDw6TVQMMqS6PFKemBJGiExc=
+- 0CN/Nk46nmf0pPkXQwnxn5liE0l/8UOShjinP/bPFyI=
