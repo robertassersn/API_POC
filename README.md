@@ -10,11 +10,15 @@ https://dlthub.com/docs/reference/explainers/how-dlt-works
 
 **Terms**
 <details>
-<summary>Source</summary>
+<summary>**Source**</summary>
 A source is a logical grouping of resources, i.e., endpoints of a single API. The most common approach is to define it in a separate Python module.
 </details>
 
-- **Pipeline** -> A pipeline moves data from your Python code to a destination. The pipeline accepts dlt sources or resources, as well as generators, async generators, lists, and any iterables. Once the pipeline runs, all resources are evaluated and the data is loaded at the destination.
+<details>
+<summary>**Pipeline**</summary>
+A pipeline moves data from your Python code to a destination. The pipeline accepts dlt sources or resources, as well as generators, async generators, lists, and any iterables. Once the pipeline runs, all resources are evaluated and the data is loaded at the destination.
+</details>
+
 
 
 **ingestion pipelines can be found at:**
