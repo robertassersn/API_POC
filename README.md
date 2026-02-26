@@ -35,17 +35,21 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 
 <details>
 <summary>Limitations</summary>
+  
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
 </details>
 
 <details>
 <summary>RAW response example (CARVAGO)</summary>
+  
 <img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+
 </details>
 
 
 <details>
 <summary>Output example</summary>
+  
 <img width="709" height="432" alt="image" src="https://github.com/user-attachments/assets/9930fabd-1a5d-43f5-9052-ca1a1e1c2cfa" />
 
 Generated output files example
@@ -54,12 +58,15 @@ Generated output files example
 
 <details>
 <summary>Assumptions</summary>
+  
 - Colleagues must understand python language, have ability to install python packages, read and understand python packages on demand on high level.
 - Understandent of .env and .conf file usage
+  
 </details>
 
 <details>
 <summary>Prerequisites</summary>
+  
 - install python packages from requirements.txt
 - create and fill parameters file in parameters directory according to example
 - create and fill .env file according to provided example
@@ -67,6 +74,7 @@ Generated output files example
 
 <details>
 <summary>Features</summary>
+  
 - possibility to insert additional metadata columns on demand so sync with external processes
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
