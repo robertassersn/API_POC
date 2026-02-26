@@ -4,7 +4,9 @@ import serpapi
 import time
 import logging
 from typing import Iterator
-
+import os,sys
+base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(base_path)
 from project_files import functions
 from ingestion.config.google_trends_config import construct_date_range, SCHEMA_CONTRACT
 
@@ -26,19 +28,28 @@ def fetch_with_retry(params: dict, max_retries: int = 3, delay: int = 5) -> dict
 
 
 @dlt.source(schema_contract=SCHEMA_CONTRACT)
-def google_trends_source(config: dict, keywords: list[str]):
+def google_trends_source(
+        job_run_id: str
+        # , keywords: list[str]
+        , DAYS_OVERLAP: str
+        , COUNTRY: str 
+        , API_KEY: str
+        , TIMEZONE: str      
+        # , DATA_TYPE: str 
+        , SEARCH_PARAMETER_LIST: list[str]
+    ):
     """Google Trends data source."""
     
-    @dlt.resource(write_disposition="merge", primary_key=["keyword", "date"])
+    @dlt.resource(write_disposition="merge", primary_key=["keyword", "date"],schema_contract={"tables": "evolve"})
     def trends() -> Iterator[dict]:
-        for keyword in keywords:
+        for keyword in [SEARCH_PARAMETER_LIST]:
             params = {
                 "engine": "google_trends",
                 "q": keyword,
-                "date": construct_date_range(),
-                "geo": config['COUNTRY'],
-                "api_key": config['API_KEY'],
-                "tz": int(config['TIMEZONE'])
+                "date": construct_date_range(DAYS_OVERLAP = DAYS_OVERLAP),
+                "geo": COUNTRY,
+                "api_key": API_KEY,
+                "tz": int(TIMEZONE)
             }
             
             results = fetch_with_retry(params)

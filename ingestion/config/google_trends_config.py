@@ -25,10 +25,10 @@ def get_config() -> dict:
     return _config
 
 
-def construct_date_range() -> str:
+def construct_date_range(DAYS_OVERLAP) -> str:
     """Build date range string for API."""
     config = get_config()
     current_date = functions.get_current_date()
-    days_overlap = -int(config['DAYS_OVERLAP'])
+    days_overlap = -int(DAYS_OVERLAP)
     current_date_minus_overlap = functions.date_add(current_date, days=days_overlap)
     return f"{current_date_minus_overlap} {current_date}"
