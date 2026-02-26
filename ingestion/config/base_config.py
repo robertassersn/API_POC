@@ -28,12 +28,12 @@ def get_pg_credentials(segment: str = 'POSTGRESQL_CONN') -> str:
 def run_dlt_pipeline(
     pipeline_name: str,
     source_func,
-    run_parameters: list,
     destination,
     dataset_name: str,
     export_schema_path: str,
     log_dir: str,
     write_disposition: str = "append",
+    run_parameters: list = None,  # now optional
 ):
     @functions.with_logging(
         log_dir=log_dir,
@@ -56,10 +56,18 @@ def run_dlt_pipeline(
             dataset_name=dataset_name,
         )
 
-        for iteration_params in run_parameters:
-            logger.info(f"Running extraction with params: {iteration_params}")
+        if run_parameters:
+            for iteration_params in run_parameters:
+                logger.info(f"Running extraction with params: {iteration_params}")
+                load_info = pipeline.run(
+                    source_func(**iteration_params),
+                    write_disposition=write_disposition,
+                )
+                logger.info(f"Load info: {load_info}")
+        else:
+            logger.info("Running extraction with no params")
             load_info = pipeline.run(
-                source_func(**iteration_params),
+                source_func(),
                 write_disposition=write_disposition,
             )
             logger.info(f"Load info: {load_info}")

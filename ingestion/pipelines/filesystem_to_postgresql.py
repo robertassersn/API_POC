@@ -25,7 +25,7 @@ pipeline = run_dlt_pipeline(
     source_func=lambda **p: filesystem_source(job_id=1,config_dictionary=config_dictionary,  **p),
     run_parameters=PIPELINE_RUN_PARAMETERS,
     destination=destination,
-    dataset_name='WORLD_BANK',
+    dataset_name='WORLD_BANK'.lower(),
     export_schema_path=config_dictionary['DLT_SOURCE_SCHEMA_DIR'],
     log_dir=config_dictionary['DLT_PIPELINE_LOGS_DIR'],
     write_disposition = 'merge'
