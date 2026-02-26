@@ -47,26 +47,26 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 <details>
 <summary>Output example</summary>
 <img width="709" height="432" alt="image" src="https://github.com/user-attachments/assets/9930fabd-1a5d-43f5-9052-ca1a1e1c2cfa" />
+
+Generated output files example
+<img width="678" height="401" alt="image" src="https://github.com/user-attachments/assets/c1961b5c-d956-4e2b-bf11-3c7a43a1ff0d" />
 </details>
 
-- Single file is normalized into multiple tables according to their grain, but keeps parent_ids via metadata columns.
-<img width="678" height="401" alt="image" src="https://github.com/user-attachments/assets/c1961b5c-d956-4e2b-bf11-3c7a43a1ff0d" />
-
-
-
-
-### Assumptions
+<details>
+<summary>Assumptions</summary>
 - Colleagues must understand python language, have ability to install python packages, read and understand python packages on demand on high level.
 - Understandent of .env and .conf file usage
-- I'm restricted to using .env and .conf files together (cannot use only single type)
+</details>
 
-### Prerequisites
+<details>
+<summary>Prerequisites</summary>
 - install python packages from requirements.txt
 - create and fill parameters file in parameters directory according to example
 - create and fill .env file according to provided example
+</details>
 
-### Features
-
+<details>
+<summary>Features</summary>
 - possibility to insert additional metadata columns on demand so sync with external processes
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
@@ -81,7 +81,7 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 
 - Library supports creating table's on its own. Meaning with enough permissions it can create schema + tables required to insert data
 <img width="810" height="490" alt="image" src="https://github.com/user-attachments/assets/613eb827-4441-4850-8691-2735b752f310" />
-
+</details>
 
 ### DRAFT NOTES
 
