@@ -91,31 +91,4 @@ Generated output files example
 <img width="810" height="490" alt="image" src="https://github.com/user-attachments/assets/613eb827-4441-4850-8691-2735b752f310" />
 </details>
 
-### DRAFT NOTES
-
-
-
-Qs
-- pipeline stoppage possibility in case of schema change
-- examples how very dynamic pipelines get structured
-
-examples to provide
-- retention of original format
-- parsed example in filesystem
-- example of results in db
-- metadata passage
-- provide sample of logs
-- provide means to easily reset schema, e.g column renaming from api side
-- orchestration in airflow using proper commands
-- means of output format control
-
-Topics 
-- sftp to DB
-- DB to SFTP
-- API
-- authentication
-- reverse ETL
-- terminal commands vs script run, info provided by terminal commands
-- Means of quality assurance besides schema validation
-- explain how to interpret metadata 
 
