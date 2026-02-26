@@ -33,14 +33,21 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 **/ingestion/sources/worldbank.py** example of datasource that yields .xml and library handles it
 
 
-
-**Limitations**:
+<details>
+<summary>Limitations</summary>
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
-RAW response example (CARVAGO)
-<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+</details>
 
-- Output example:
+<details>
+<summary>RAW response example (CARVAGO)</summary>
+<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+</details>
+
+
+<details>
+<summary>Output example</summary>
 <img width="709" height="432" alt="image" src="https://github.com/user-attachments/assets/9930fabd-1a5d-43f5-9052-ca1a1e1c2cfa" />
+</details>
 
 - Single file is normalized into multiple tables according to their grain, but keeps parent_ids via metadata columns.
 <img width="678" height="401" alt="image" src="https://github.com/user-attachments/assets/c1961b5c-d956-4e2b-bf11-3c7a43a1ff0d" />
@@ -59,6 +66,7 @@ RAW response example (CARVAGO)
 - create and fill .env file according to provided example
 
 ### Features
+
 - possibility to insert additional metadata columns on demand so sync with external processes
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
