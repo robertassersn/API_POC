@@ -5,8 +5,8 @@ Template must be easy to understand and causes ease in further development.
 
 - fill path to config in .env file
 - jobs are parametrized, therefore you'll need to create and fill config file using example from /parameters/job_parameters _example.conf
-**ingestion pipelines can be found at:**
-/ingestion/pipelines/
+  
+**ingestion pipelines can be found at**: /ingestion/pipelines/
 
 **carvago_to_filesystem_example.py** provides example how to load files into filesystem
 
