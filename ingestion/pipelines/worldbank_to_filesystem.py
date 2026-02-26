@@ -24,7 +24,7 @@ pipeline = run_dlt_pipeline(
     source_func=lambda **p: worldbank_source(job_id=1, **p),
     run_parameters=PIPELINE_RUN_PARAMETERS,
     destination=destination,
-    dataset_name=DATASOURCE,
+    dataset_name=DATASOURCE.lower(),
     export_schema_path=config_dictionary['DLT_SOURCE_SCHEMA_DIR'],
     log_dir=config_dictionary['DLT_PIPELINE_LOGS_DIR'],
 )
