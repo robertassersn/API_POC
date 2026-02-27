@@ -73,6 +73,10 @@ Generated output files example
 <details>
 <summary>Features</summary>
   
+- Possiblity to reset pipeline state completely (delete metadata from configurations and start fresh)
+<img width="902" height="204" alt="image" src="https://github.com/user-attachments/assets/7bc46351-2195-41dc-9bab-a00084d83186" />
+
+  
 - Quality features: https://dlthub.com/docs/general-usage/data-quality-lifecycle
 - linkage between normalized tables/filzes
 <img width="547" height="331" alt="image" src="https://github.com/user-attachments/assets/aae1c383-4bc8-4d1c-85a9-37561482925a" />
