@@ -72,6 +72,9 @@ Generated output files example
 
 <details>
 <summary>Features</summary>
+  
+- linkage between normalized tables/filzes
+<img width="547" height="331" alt="image" src="https://github.com/user-attachments/assets/aae1c383-4bc8-4d1c-85a9-37561482925a" />
 
 - Possiblity to define schema contracts: https://dlthub.com/docs/general-usage/schema-contracts
 - possibility to insert additional metadata columns on demand so sync with external processes
@@ -83,7 +86,7 @@ Generated output files example
 - tracking of historical pipeline runs
 <img width="668" height="160" alt="image" src="https://github.com/user-attachments/assets/fca0ad53-5f40-4ba5-9ccf-e9483b52ca60" />
 
-- Possbility to avoid duplication from source by defining API output Primary key + write disposition that controls loading behavior of job
+- Possibility to avoid duplication from source by defining API output Primary key + write disposition that controls loading behavior of job
 <img width="859" height="240" alt="image" src="https://github.com/user-attachments/assets/3fd385ef-67c9-44d5-86ce-02d8619d12b9" />
 
 - Library supports creating table's on its own. Meaning with enough permissions it can create schema + tables required to insert data
