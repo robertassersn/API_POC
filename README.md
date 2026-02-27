@@ -73,6 +73,7 @@ Generated output files example
 <details>
 <summary>Features</summary>
   
+- Quality features: https://dlthub.com/docs/general-usage/data-quality-lifecycle
 - linkage between normalized tables/filzes
 <img width="547" height="331" alt="image" src="https://github.com/user-attachments/assets/aae1c383-4bc8-4d1c-85a9-37561482925a" />
 
