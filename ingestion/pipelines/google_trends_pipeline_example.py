@@ -11,7 +11,17 @@ from ingestion.config.base_config import get_pg_credentials
 from project_files import functions
 from ingestion.config.base_config import run_dlt_pipeline
 
-destination=dlt.destinations.postgres(credentials=get_pg_credentials())
+destination=dlt.destinations.postgres(
+    credentials=get_pg_credentials()
+    ,staging_dataset_name_layout="%s_temp" 
+    )
+# ,staging_dataset_name_layout="%s_temp" 
+"""
+by default library will create google_trends and google_trends_staging schemas
+it is possible however to control temporary/staging schema name
+e.g have schema google_trends_temp
+"""
+
 DATASOURCE = 'GOOGLE_TRENDS'
 PIPELINE_NAME = 'google_trends_to_postgresql'
 config_dictionary = functions.read_config_segment(segment=DATASOURCE)
