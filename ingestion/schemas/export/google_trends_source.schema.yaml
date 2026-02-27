@@ -1,5 +1,5 @@
-version: 2
-version_hash: JJhjxhjdnR0El+h3L6y6CjvH7pVT+6MdM8aHdQKtcgw=
+version: 3
+version_hash: REBNEGAaGIRLAKKNh+MLCLwCajIadxLamwxpfHyRq/w=
 engine_version: 11
 name: google_trends_source
 tables:
@@ -68,6 +68,9 @@ tables:
         nullable: false
         unique: true
         row_key: true
+      job_run_id:
+        data_type: bigint
+        nullable: true
     schema_contract:
       tables: evolve
     write_disposition: merge
@@ -170,5 +173,6 @@ normalizers:
           trends:
             _dlt_id: _dlt_root_id
 previous_hashes:
+- JJhjxhjdnR0El+h3L6y6CjvH7pVT+6MdM8aHdQKtcgw=
 - M/N3XR5cwrLAtiY0+oAylSNy+X+NwZkrZ2/flO4llbk=
 - 3iCbCE+r2Wggw8q2KI2Tkdgxm+k6p1S15IIV+uuSEjo=

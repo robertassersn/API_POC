@@ -59,7 +59,8 @@ def google_trends_source(
                     "keyword": keyword,
                     "date": item.get("date"),
                     "timestamp": item.get("timestamp"),
-                    "values": item.get("values")
+                    "values": item.get("values"),
+                    "job_run_id": job_run_id
                 }
     
     return trends
