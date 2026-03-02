@@ -70,8 +70,8 @@ Generated output files example
 <details>
 <summary>Assumptions</summary>
   
-- Colleagues must understand python language, have ability to install python packages, read and understand python packages on demand on high level.
-- Understandent of .env and .conf file usage
+- Familiarity with python requires, have ability to install python packages, read and understand python packages on demand on high level.
+- Understanding of .env and .conf file usage
 - For consistency I'm requested to pass ALL variables via .conf file
 -  ingestion/schemas/export directory wouldn't be listed in prod, but provides an example how schema definition for ingested files would be stored
   
@@ -88,7 +88,7 @@ Generated output files example
 <details>
 <summary>Features</summary>
   
-- Possiblity to reset pipeline state completely (delete metadata from configurations and start fresh. Does not drop/truncate tables)
+- Possibility to reset pipeline state completely (delete metadata from configurations and start fresh. Does not drop/truncate tables)
 <img width="902" height="204" alt="image" src="https://github.com/user-attachments/assets/7bc46351-2195-41dc-9bab-a00084d83186" />
 
   
@@ -96,7 +96,7 @@ Generated output files example
 - linkage between normalized tables/filzes
 <img width="547" height="331" alt="image" src="https://github.com/user-attachments/assets/aae1c383-4bc8-4d1c-85a9-37561482925a" />
 
-- Possiblity to define schema contracts: https://dlthub.com/docs/general-usage/schema-contracts
+- Possibility to define schema contracts: https://dlthub.com/docs/general-usage/schema-contracts
 - possibility to insert additional metadata columns on demand so sync with external processes
 <img width="681" height="243" alt="image" src="https://github.com/user-attachments/assets/c8e158d8-e92b-44c9-aa0a-2d8da04a11f7" />
 
