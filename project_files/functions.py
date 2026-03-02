@@ -87,67 +87,6 @@ def read_config_segment(segment = 'DEFAULT'):
     return conf_segment_values
 config_dictionary = read_config_segment()
 
-def get_postgresql_connection(conn_info):
-    """
-    Create a connection to a PostgreSQL database.
-
-    Args
-    conn_info -> connection information provided by config
-    
-    Returns:
-        psycopg2 connection object
-    """
-    connection = psycopg2.connect(
-        host=conn_info["HOST_NAME"],
-        port=conn_info["PORT_NUMBER"],
-        database=conn_info["DATABASE"],
-        user=conn_info["USERNAME"],
-        password=conn_info["PASSWORD"]
-    )
-    
-    return connection
-
-@contextmanager
-def get_connection(connection_type):
-    """
-    Get database connection as context manager.
-    
-    Usage:
-        with get_connection('postgresql_dwh') as conn:
-            # do stuff
-        # connection auto-closes here
-    """
-    conn_info = read_config_segment(segment=connection_type)
-    db_type = conn_info.get('type')
-    
-    CONNECTORS = {
-        'POSTGRESQL': lambda: get_postgresql_connection(conn_info)
-    }
-    
-    conn = CONNECTORS[db_type]()
-    try:
-        yield conn
-    finally:
-        conn.close()
-
-import os
-import csv
-import json
-    
-def get_cli_args(defaults = None):
-    parser = argparse.ArgumentParser()
-    args,unknown = parser.parse_known_args()
-
-    arg_dict = {}
-    for i in range(0,len(unknown) ,2):
-        key = unknown[i].lstrip('-')
-        if i + 1 < len(unknown):
-            arg_dict[key] = unknown[i + 1]
-    if defaults:
-        for key, value in defaults.items():
-            arg_dict.setdefault(key,value)
-
-    return arg_dict
 
 
 # import logging
