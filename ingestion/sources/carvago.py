@@ -1,15 +1,18 @@
 import dlt
 from dlt.sources.rest_api import rest_api_resources
-from dlt.sources.rest_api.typing import RESTAPIConfig
 import os
 import sys
 import dlt
-import requests
 from typing import Iterator
 from typing import Optional, Union, List
 from datetime import datetime
 import json
 from pathlib import Path
+base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(base_path)
+from ingestion.config.base_config import requests_get_page
+from project_files import functions
+# from tenacity import wait_fixed,retry,stop_after_attempt
 # https://api.carvago.com/api/listedcars?country[]=32
 # &mileage-from=2500
 # &mileage-to=200000
@@ -20,10 +23,6 @@ from pathlib import Path
 # &registration-date-from=2006
 # &registration-date-to=2026
 # &make[]=MAKE_LAND_ROVER&limit=1
-
-base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
-sys.path.append(base_path)
-from project_files import functions
 
 
 os.environ["RUNTIME__LOG_LEVEL"] = "INFO"  # set before pipeline creation
@@ -96,9 +95,13 @@ def carvago_source(
                     params["registration-date-from"] = registration_date_from
                 if registration_date_to is not None:
                     params["registration-date-to"] = registration_date_to
-
-                response = requests.get(base_url, params=params, timeout=30)
-                response.raise_for_status()
+                
+                # response = requests.get(base_url, params=params, timeout=30)
+                # response.raise_for_status()
+                response = requests_get_page(
+                    base_url = base_url
+                    ,params = params 
+                )
                 data = response.json()
 
                 if not data:

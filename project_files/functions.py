@@ -150,50 +150,50 @@ def get_cli_args(defaults = None):
     return arg_dict
 
 
-import logging
-import os
-from datetime import datetime
-from functools import wraps
+# import logging
+# import os
+# from datetime import datetime
+# from functools import wraps
 
 
-def with_logging(
-    pipeline_name: str,
-    log_dir: str = "logs",
-    level: int = logging.DEBUG
-):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            os.makedirs(log_dir, exist_ok=True)
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+# def with_logging(
+#     pipeline_name: str,
+#     log_dir: str = "logs",
+#     level: int = logging.DEBUG
+# ):
+#     def decorator(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             os.makedirs(log_dir, exist_ok=True)
+#             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-            file_handler = logging.FileHandler(
-                f"{log_dir}/{pipeline_name}_{timestamp}.log"
-            )
-            file_handler.setLevel(level)
-            file_handler.setFormatter(logging.Formatter(
-                "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
-            ))
+#             file_handler = logging.FileHandler(
+#                 f"{log_dir}/{pipeline_name}_{timestamp}.log"
+#             )
+#             file_handler.setLevel(level)
+#             file_handler.setFormatter(logging.Formatter(
+#                 "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
+#             ))
 
-            root_logger = logging.getLogger()
-            root_logger.setLevel(level)
-            root_logger.addHandler(file_handler)
+#             root_logger = logging.getLogger()
+#             root_logger.setLevel(level)
+#             root_logger.addHandler(file_handler)
 
-            for name in logging.root.manager.loggerDict:
-                if name.startswith("dlt"):
-                    l = logging.getLogger(name)
-                    l.setLevel(level)
-                    l.propagate = True
-                    l.addHandler(file_handler)
+#             for name in logging.root.manager.loggerDict:
+#                 if name.startswith("dlt"):
+#                     l = logging.getLogger(name)
+#                     l.setLevel(level)
+#                     l.propagate = True
+#                     l.addHandler(file_handler)
 
-            try:
-                return func(*args, **kwargs)
-            finally:
-                file_handler.close()
-                root_logger.removeHandler(file_handler)
-                for name in logging.root.manager.loggerDict:
-                    if name.startswith("dlt"):
-                        logging.getLogger(name).removeHandler(file_handler)
+#             try:
+#                 return func(*args, **kwargs)
+#             finally:
+#                 file_handler.close()
+#                 root_logger.removeHandler(file_handler)
+#                 for name in logging.root.manager.loggerDict:
+#                     if name.startswith("dlt"):
+#                         logging.getLogger(name).removeHandler(file_handler)
 
-        return wrapper
-    return decorator
+#         return wrapper
+#     return decorator
