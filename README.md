@@ -36,6 +36,7 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 <summary>Limitations</summary>
   
 - DLT on its own does not retain original output from API call, it always normalizes it. However it is possible to retain both original and normalized output without difficulty on demand.
+- currently destinations are limited to postgresql and local filesystem
 </details>
 
 <details>
