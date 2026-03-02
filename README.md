@@ -34,6 +34,9 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 <details>
 <summary>Schema contract</summary>
 a config, describing pipeline behavior in case of schema changes. Changes may be on table,column, column data types. Allowing to adjust due to particular changes or stop the job altogether.
+  
+In depth description can be found here:
+https://dlthub.com/docs/general-usage/schema-contracts
 </details>
 
 **Further Details**
