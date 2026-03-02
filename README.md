@@ -50,9 +50,12 @@ A pipeline moves data from your Python code to a destination. The pipeline accep
 <details>
 <summary>Output example</summary>
   
+- received data during api request is being normalized to its grain. Meaning one response may yield multiple files/tables
+  
 <img width="709" height="432" alt="image" src="https://github.com/user-attachments/assets/9930fabd-1a5d-43f5-9052-ca1a1e1c2cfa" />
 
 Generated output files example
+
 <img width="678" height="401" alt="image" src="https://github.com/user-attachments/assets/c1961b5c-d956-4e2b-bf11-3c7a43a1ff0d" />
 </details>
 
