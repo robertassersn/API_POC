@@ -61,6 +61,7 @@ Generated output files example
 - Colleagues must understand python language, have ability to install python packages, read and understand python packages on demand on high level.
 - Understandent of .env and .conf file usage
 - For consistency I'm requested to pass ALL variables via .conf file
+-  ingestion/schemas/export directory wouldn't be listed in prod, but provides an example how schema definition for ingested files would be stored
   
 </details>
 
