@@ -17,6 +17,7 @@ Template must be easy to understand and causes ease in further development.
 
 **/ingestion/sources/worldbank.py** example of datasource that yields .xml and library handles it
 
+### Additional information
 
 **pipeline algorithm:**
 https://dlthub.com/docs/reference/explainers/how-dlt-works
