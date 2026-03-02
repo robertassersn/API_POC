@@ -3,6 +3,9 @@
 provide a template for data ingestion, template can fluctuate on demand, therefore provide coverage examples for various scenarios that company can adapt.
 Template must be easy to understand and causes ease in further development.
 
+**TL;DR**
+When data is received from datasource DLT framework takes care of normalization of records into their dedicated grain, tracks schema changes, allows control over the job and data in case of schema changes. Supports wide range of destinations where data can be stored. Meaning Data Engineer can focus on writing and maintaining data extraction from source scripts.
+
 - fill path to config in .env file
 - jobs are parametrized, therefore you'll need to create and fill config file using example from /parameters/job_parameters _example.conf
 
