@@ -11,6 +11,7 @@ from pathlib import Path
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from project_files import functions
+from ingestion.config.base_config import requests_get_page
 
 os.environ["RUNTIME__LOG_LEVEL"] = "INFO"
 DATASOURCE = 'WORLD_BANK'
@@ -35,16 +36,19 @@ def worldbank_source(
         total_yielded = 0
 
         while True:
-            url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator}"
+            base_url = f"https://api.worldbank.org/v2/country/{country}/indicator/{indicator}"
             params = {
                 "format": output_format,
                 "per_page": per_page,
                 "page": page,
             }
 
-            response = requests.get(url, params=params, timeout=60)
-            response.raise_for_status()
-
+            # response = requests.get(url, params=params, timeout=60)
+            # response.raise_for_status()  
+            response = requests_get_page(
+                    base_url = base_url
+                    ,params = params 
+                )              
             raw_file = raw_dir / f"worldbank_{country}_{indicator}_{timestamp}_page{page}.xml"
             with open(raw_file, "wb") as f:
                 f.write(response.content)

@@ -5,9 +5,11 @@ import logging
 import dlt
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
-
+from datetime import datetime
+from functools import wraps
 from project_files import functions
-
+import tenacity
+from tenacity import wait_fixed,retry,stop_after_attempt
 _conn_cache = {}
 
 
@@ -24,6 +26,47 @@ def get_pg_credentials(segment: str = 'POSTGRESQL_CONN') -> str:
     return f"postgresql://{conn['USERNAME']}:{conn['PASSWORD']}@{conn['HOST_NAME']}:{conn['PORT_NUMBER']}/{conn['DATABASE']}"
 
 
+def with_logging_dlt(
+    pipeline_name: str,
+    log_dir: str = "logs",
+    level: int = logging.DEBUG
+):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            os.makedirs(log_dir, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            file_handler = logging.FileHandler(
+                f"{log_dir}/{pipeline_name}_{timestamp}.log"
+            )
+            file_handler.setLevel(level)
+            file_handler.setFormatter(logging.Formatter(
+                "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
+            ))
+
+            root_logger = logging.getLogger()
+            root_logger.setLevel(level)
+            root_logger.addHandler(file_handler)
+
+            for name in logging.root.manager.loggerDict:
+                if name.startswith("dlt"):
+                    l = logging.getLogger(name)
+                    l.setLevel(level)
+                    l.propagate = True
+                    l.addHandler(file_handler)
+
+            try:
+                return func(*args, **kwargs)
+            finally:
+                file_handler.close()
+                root_logger.removeHandler(file_handler)
+                for name in logging.root.manager.loggerDict:
+                    if name.startswith("dlt"):
+                        logging.getLogger(name).removeHandler(file_handler)
+
+        return wrapper
+    return decorator
 
 def run_dlt_pipeline(
     pipeline_name: str,
@@ -35,7 +78,7 @@ def run_dlt_pipeline(
     write_disposition: str = "append",
     run_parameters: list = None,  # now optional
 ):
-    @functions.with_logging(
+    @with_logging_dlt(
         log_dir=log_dir,
         pipeline_name=pipeline_name,
         level=logging.INFO
@@ -55,7 +98,7 @@ def run_dlt_pipeline(
             destination=destination,
             dataset_name=dataset_name,
         )
-
+        
         if run_parameters:
             for iteration_params in run_parameters:
                 logger.info(f"Running extraction with params: {iteration_params}")
@@ -75,3 +118,62 @@ def run_dlt_pipeline(
         logger.info("pipeline run complete")
 
     _run()
+
+
+import time
+import requests
+
+RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
+
+def fetch_with_retries(url, params, timeout=60, max_retries=5):
+    attempt = 0
+
+    while True:
+        try:
+            response = requests.get(url, params=params, timeout=timeout)
+
+            # If status is OK, return immediately
+            if response.status_code < 400:
+                return response
+
+            # If status requires waiting
+            if response.status_code in RETRY_STATUS_CODES:
+                attempt += 1
+                if attempt > max_retries:
+                    response.raise_for_status()
+
+                # Respect Retry-After header if present
+                retry_after = response.headers.get("Retry-After")
+                if retry_after:
+                    wait = int(retry_after)
+                else:
+                    wait = min(2 ** attempt, 60)  # exponential backoff capped at 60s
+
+                time.sleep(wait)
+                continue
+
+            # Other errors: raise immediately
+            response.raise_for_status()
+
+        except (requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError) as e:
+            attempt += 1
+            if attempt > max_retries:
+                raise
+
+            wait = min(2 ** attempt, 60)
+            time.sleep(wait)
+
+@tenacity.retry(
+    stop=stop_after_attempt(2),
+    wait=wait_fixed(60),
+    reraise=True,
+)
+def requests_get_page(
+    base_url
+    , params
+    , timeout = 30
+    ) -> dict:
+    response = requests.get(base_url, params=params, timeout=30)
+    response.raise_for_status()
+    return response
