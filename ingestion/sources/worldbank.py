@@ -1,11 +1,9 @@
 import dlt
 import os
 import sys
-import requests
 import xmltodict
-from typing import Iterator, Optional
+from typing import Iterator
 from datetime import datetime
-import json
 from pathlib import Path
 
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))

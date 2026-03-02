@@ -4,7 +4,6 @@ import os
 import sys
 import dlt
 from typing import Iterator
-from typing import Optional, Union, List
 from datetime import datetime
 import json
 from pathlib import Path
@@ -33,18 +32,18 @@ config_dictionary = functions.read_config_segment(segment=DATASOURCE)
 @dlt.source
 def carvago_source(
     job_id: str,
-    country: Optional[Union[int, List[int]]] = None,
-    make: Optional[Union[str, List[str]]] = None,
-    mileage_from: Optional[int] = None,
-    mileage_to: Optional[int] = None,
-    power_from: Optional[int] = None,
-    power_to: Optional[int] = None,
-    price_from: Optional[int] = None,
-    price_to: Optional[int] = None,
-    registration_date_from: Optional[int] = None,
-    registration_date_to: Optional[int] = None,
+    country: str = None,
+    make: str = None,
+    mileage_from: str = None,
+    mileage_to: str =  None,
+    power_from: str = None,
+    power_to: str = None,
+    price_from: str = None,
+    price_to: str = None,
+    registration_date_from: str = None,
+    registration_date_to: str = None,
     page_size: int = 100,
-    max_records: Optional[int] = None,
+    max_records: str = None,
 ):
     @dlt.resource(name="listedcars", write_disposition="merge", primary_key="id")
     def listedcars_resource() -> Iterator[dict]:
@@ -96,8 +95,6 @@ def carvago_source(
                 if registration_date_to is not None:
                     params["registration-date-to"] = registration_date_to
                 
-                # response = requests.get(base_url, params=params, timeout=30)
-                # response.raise_for_status()
                 response = requests_get_page(
                     base_url = base_url
                     ,params = params 
@@ -119,82 +116,3 @@ def carvago_source(
                 offset += page_size
 
     return listedcars_resource
-
-# @dlt.source
-# def carvago_source(
-#     job_id: str,
-#     country: Optional[Union[int, List[int]]] = None,
-#     make: Optional[Union[str, List[str]]] = None,
-#     mileage_from: Optional[int] = None,
-#     mileage_to: Optional[int] = None,
-#     power_from: Optional[int] = None,
-#     power_to: Optional[int] = None,
-#     price_from: Optional[int] = None,
-#     price_to: Optional[int] = None,
-#     registration_date_from: Optional[int] = None,
-#     registration_date_to: Optional[int] = None,
-#     page_size: int = 100,
-#     max_records: Optional[int] = None,  # None = no limit
-# ):
-#     @dlt.resource(name="listedcars", write_disposition="merge", primary_key="id")
-#     def listedcars_resource() -> Iterator[dict]:
-#         base_url = "https://api.carvago.com/api/listedcars"
-#         offset = 0
-#         total_yielded = 0
-
-#         while True:
-#             # Shrink page size on last page if max_records is set
-#             effective_page_size = page_size
-#             if max_records is not None:
-#                 remaining = max_records - total_yielded
-#                 if remaining <= 0:
-#                     break
-#                 effective_page_size = min(page_size, remaining)
-
-#             params = {
-#                 "power-unit": "kw",
-#                 "sort": "publish-date",
-#                 "direction": "desc",
-#                 "limit": effective_page_size,
-#                 "offset": offset,
-#             }
-
-#             if country is not None:
-#                 params["country[]"] = country
-#             if make is not None:
-#                 params["make[]"] = make
-#             if mileage_from is not None:
-#                 params["mileage-from"] = mileage_from
-#             if mileage_to is not None:
-#                 params["mileage-to"] = mileage_to
-#             if power_from is not None:
-#                 params["power-from"] = power_from
-#             if power_to is not None:
-#                 params["power-to"] = power_to
-#             if price_from is not None:
-#                 params["price-from"] = price_from
-#             if price_to is not None:
-#                 params["price-to"] = price_to
-#             if registration_date_from is not None:
-#                 params["registration-date-from"] = registration_date_from
-#             if registration_date_to is not None:
-#                 params["registration-date-to"] = registration_date_to
-
-#             response = requests.get(base_url, params=params, timeout=30)
-#             response.raise_for_status()
-#             data = response.json()
-
-#             if not data:
-#                 break
-
-#             for record in data:
-#                 record["job_id"] = job_id
-#                 yield record
-#                 total_yielded += 1
-
-#             if len(data) < effective_page_size:
-#                 break
-
-#             offset += page_size
-
-#     return listedcars_resource

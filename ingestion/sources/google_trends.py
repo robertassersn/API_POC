@@ -7,7 +7,6 @@ from typing import Iterator
 import os,sys
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
-from project_files import functions
 from ingestion.config.google_trends_config import construct_date_range, SCHEMA_CONTRACT
 
 logger = logging.getLogger(__name__)
@@ -30,12 +29,10 @@ def fetch_with_retry(params: dict, max_retries: int = 3, delay: int = 5) -> dict
 @dlt.source(schema_contract=SCHEMA_CONTRACT)
 def google_trends_source(
         job_run_id: str
-        # , keywords: list[str]
         , DAYS_OVERLAP: str
         , COUNTRY: str 
         , API_KEY: str
         , TIMEZONE: str      
-        # , DATA_TYPE: str 
         , SEARCH_PARAMETER_LIST: list[str]
     ):
     """Google Trends data source."""
