@@ -31,6 +31,7 @@ A source is a logical grouping of resources, i.e., endpoints of a single API. Th
 A pipeline moves data from your Python code to a destination. The pipeline accepts dlt sources or resources, as well as generators, async generators, lists, and any iterables. Once the pipeline runs, all resources are evaluated and the data is loaded at the destination.
 </details>
 
+<details>
 <summary>Schema contract</summary>
 a config, describing pipeline behavior in case of schema changes. Changes may be on table,column, column data types. Allowing to adjust due to particular changes or stop the job altogether.
 </details>
