@@ -4,16 +4,9 @@ import os
 import sys
 import configparser
 import logging
-import psycopg2
 from datetime import date, timedelta,datetime
 from dateutil.relativedelta import relativedelta
-import re 
-import shutil
-import argparse
 import pyarrow.parquet as pq
-from io import StringIO
-import csv
-from contextlib import contextmanager
 base_path = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../'
@@ -86,53 +79,3 @@ def read_config_segment(segment = 'DEFAULT'):
     conf_segment_values = _config_parser[segment]
     return conf_segment_values
 config_dictionary = read_config_segment()
-
-
-
-# import logging
-# import os
-# from datetime import datetime
-# from functools import wraps
-
-
-# def with_logging(
-#     pipeline_name: str,
-#     log_dir: str = "logs",
-#     level: int = logging.DEBUG
-# ):
-#     def decorator(func):
-#         @wraps(func)
-#         def wrapper(*args, **kwargs):
-#             os.makedirs(log_dir, exist_ok=True)
-#             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-#             file_handler = logging.FileHandler(
-#                 f"{log_dir}/{pipeline_name}_{timestamp}.log"
-#             )
-#             file_handler.setLevel(level)
-#             file_handler.setFormatter(logging.Formatter(
-#                 "%(asctime)s|[%(levelname)s]|%(name)s|%(filename)s|%(funcName)s:%(lineno)d|%(message)s"
-#             ))
-
-#             root_logger = logging.getLogger()
-#             root_logger.setLevel(level)
-#             root_logger.addHandler(file_handler)
-
-#             for name in logging.root.manager.loggerDict:
-#                 if name.startswith("dlt"):
-#                     l = logging.getLogger(name)
-#                     l.setLevel(level)
-#                     l.propagate = True
-#                     l.addHandler(file_handler)
-
-#             try:
-#                 return func(*args, **kwargs)
-#             finally:
-#                 file_handler.close()
-#                 root_logger.removeHandler(file_handler)
-#                 for name in logging.root.manager.loggerDict:
-#                     if name.startswith("dlt"):
-#                         logging.getLogger(name).removeHandler(file_handler)
-
-#         return wrapper
-#     return decorator
