@@ -27,7 +27,7 @@ pipeline = run_dlt_pipeline(
     dataset_name='WORLD_BANK'.lower(),
     export_schema_path=config_dictionary['DLT_SOURCE_SCHEMA_DIR'],
     log_dir=config_dictionary['DLT_PIPELINE_LOGS_DIR'],
-    write_disposition = 'merge'
+    write_disposition = 'replace'
     # write disposition docs: https://dlthub.com/docs/general-usage/incremental-loading
 )
 

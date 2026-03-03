@@ -24,7 +24,7 @@ def worldbank_source(
     output_format: str = "xml",
     per_page: int = 1000,
 ):
-    @dlt.resource(name=f"{country}_{indicator}", write_disposition="merge", primary_key="indicator_country_date")
+    @dlt.resource(name=f"{country}_{indicator}", write_disposition="replace", primary_key="indicator_country_date")
     def worldbank_resource() -> Iterator[dict]:
         raw_dir = Path(config_dictionary['DIR_RAW_FILES'])
         raw_dir.mkdir(parents=True, exist_ok=True)
