@@ -1,0 +1,831 @@
+version: 2
+version_hash: +5v20Hi5few2U3KDiGL5IPN2aC1+LMzt66bflTZg8Nk=
+engine_version: 11
+name: github_source
+tables:
+  _dlt_version:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_name:
+        data_type: text
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: false
+      schema:
+        data_type: text
+        nullable: false
+    write_disposition: skip
+    resource: _dlt_version
+    description: Created by DLT. Tracks schema updates
+  _dlt_loads:
+    columns:
+      load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      schema_name:
+        data_type: text
+        nullable: true
+      status:
+        data_type: bigint
+        nullable: false
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+      schema_version_hash:
+        data_type: text
+        nullable: true
+    write_disposition: skip
+    resource: _dlt_loads
+    description: Created by DLT. Tracks completed loads
+  issues:
+    columns:
+      url:
+        data_type: text
+        nullable: true
+      repository_url:
+        data_type: text
+        nullable: true
+      labels_url:
+        data_type: text
+        nullable: true
+      comments_url:
+        data_type: text
+        nullable: true
+      events_url:
+        data_type: text
+        nullable: true
+      html_url:
+        data_type: text
+        nullable: true
+      id:
+        nullable: false
+        primary_key: true
+        data_type: bigint
+      node_id:
+        data_type: text
+        nullable: true
+      number:
+        data_type: bigint
+        nullable: true
+      title:
+        data_type: text
+        nullable: true
+      user__login:
+        data_type: text
+        nullable: true
+      user__id:
+        data_type: bigint
+        nullable: true
+      user__node_id:
+        data_type: text
+        nullable: true
+      user__avatar_url:
+        data_type: text
+        nullable: true
+      user__gravatar_id:
+        data_type: text
+        nullable: true
+      user__url:
+        data_type: text
+        nullable: true
+      user__html_url:
+        data_type: text
+        nullable: true
+      user__followers_url:
+        data_type: text
+        nullable: true
+      user__following_url:
+        data_type: text
+        nullable: true
+      user__gists_url:
+        data_type: text
+        nullable: true
+      user__starred_url:
+        data_type: text
+        nullable: true
+      user__subscriptions_url:
+        data_type: text
+        nullable: true
+      user__organizations_url:
+        data_type: text
+        nullable: true
+      user__repos_url:
+        data_type: text
+        nullable: true
+      user__events_url:
+        data_type: text
+        nullable: true
+      user__received_events_url:
+        data_type: text
+        nullable: true
+      user__type:
+        data_type: text
+        nullable: true
+      user__user_view_type:
+        data_type: text
+        nullable: true
+      user__site_admin:
+        data_type: bool
+        nullable: true
+      state:
+        data_type: text
+        nullable: true
+      locked:
+        data_type: bool
+        nullable: true
+      comments:
+        data_type: bigint
+        nullable: true
+      created_at:
+        data_type: timestamp
+        nullable: true
+      updated_at:
+        incremental: true
+        data_type: timestamp
+        nullable: true
+      author_association:
+        data_type: text
+        nullable: true
+      active_lock_reason:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      sub_issues_summary__total:
+        data_type: bigint
+        nullable: true
+      sub_issues_summary__completed:
+        data_type: bigint
+        nullable: true
+      sub_issues_summary__percent_completed:
+        data_type: bigint
+        nullable: true
+      issue_dependencies_summary__blocked_by:
+        data_type: bigint
+        nullable: true
+      issue_dependencies_summary__total_blocked_by:
+        data_type: bigint
+        nullable: true
+      issue_dependencies_summary__blocking:
+        data_type: bigint
+        nullable: true
+      issue_dependencies_summary__total_blocking:
+        data_type: bigint
+        nullable: true
+      body:
+        data_type: text
+        nullable: true
+      reactions__url:
+        data_type: text
+        nullable: true
+      reactions__total_count:
+        data_type: bigint
+        nullable: true
+      reactions__x1:
+        data_type: bigint
+        nullable: true
+      reactions___1:
+        data_type: bigint
+        nullable: true
+      reactions__laugh:
+        data_type: bigint
+        nullable: true
+      reactions__hooray:
+        data_type: bigint
+        nullable: true
+      reactions__confused:
+        data_type: bigint
+        nullable: true
+      reactions__heart:
+        data_type: bigint
+        nullable: true
+      reactions__rocket:
+        data_type: bigint
+        nullable: true
+      reactions__eyes:
+        data_type: bigint
+        nullable: true
+      timeline_url:
+        data_type: text
+        nullable: true
+      pinned_comment:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      job_run_id:
+        data_type: bigint
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+      assignee__login:
+        data_type: text
+        nullable: true
+      assignee__id:
+        data_type: bigint
+        nullable: true
+      assignee__node_id:
+        data_type: text
+        nullable: true
+      assignee__avatar_url:
+        data_type: text
+        nullable: true
+      assignee__gravatar_id:
+        data_type: text
+        nullable: true
+      assignee__url:
+        data_type: text
+        nullable: true
+      assignee__html_url:
+        data_type: text
+        nullable: true
+      assignee__followers_url:
+        data_type: text
+        nullable: true
+      assignee__following_url:
+        data_type: text
+        nullable: true
+      assignee__gists_url:
+        data_type: text
+        nullable: true
+      assignee__starred_url:
+        data_type: text
+        nullable: true
+      assignee__subscriptions_url:
+        data_type: text
+        nullable: true
+      assignee__organizations_url:
+        data_type: text
+        nullable: true
+      assignee__repos_url:
+        data_type: text
+        nullable: true
+      assignee__events_url:
+        data_type: text
+        nullable: true
+      assignee__received_events_url:
+        data_type: text
+        nullable: true
+      assignee__type:
+        data_type: text
+        nullable: true
+      assignee__user_view_type:
+        data_type: text
+        nullable: true
+      assignee__site_admin:
+        data_type: bool
+        nullable: true
+      draft:
+        data_type: bool
+        nullable: true
+      pull_request__url:
+        data_type: text
+        nullable: true
+      pull_request__html_url:
+        data_type: text
+        nullable: true
+      pull_request__diff_url:
+        data_type: text
+        nullable: true
+      pull_request__patch_url:
+        data_type: text
+        nullable: true
+      closed_at:
+        nullable: true
+        data_type: timestamp
+      closed_by__login:
+        data_type: text
+        nullable: true
+      closed_by__id:
+        data_type: bigint
+        nullable: true
+      closed_by__node_id:
+        data_type: text
+        nullable: true
+      closed_by__avatar_url:
+        data_type: text
+        nullable: true
+      closed_by__gravatar_id:
+        data_type: text
+        nullable: true
+      closed_by__url:
+        data_type: text
+        nullable: true
+      closed_by__html_url:
+        data_type: text
+        nullable: true
+      closed_by__followers_url:
+        data_type: text
+        nullable: true
+      closed_by__following_url:
+        data_type: text
+        nullable: true
+      closed_by__gists_url:
+        data_type: text
+        nullable: true
+      closed_by__starred_url:
+        data_type: text
+        nullable: true
+      closed_by__subscriptions_url:
+        data_type: text
+        nullable: true
+      closed_by__organizations_url:
+        data_type: text
+        nullable: true
+      closed_by__repos_url:
+        data_type: text
+        nullable: true
+      closed_by__events_url:
+        data_type: text
+        nullable: true
+      closed_by__received_events_url:
+        data_type: text
+        nullable: true
+      closed_by__type:
+        data_type: text
+        nullable: true
+      closed_by__user_view_type:
+        data_type: text
+        nullable: true
+      closed_by__site_admin:
+        data_type: bool
+        nullable: true
+      state_reason:
+        nullable: true
+        data_type: text
+      milestone__url:
+        data_type: text
+        nullable: true
+      milestone__html_url:
+        data_type: text
+        nullable: true
+      milestone__labels_url:
+        data_type: text
+        nullable: true
+      milestone__id:
+        data_type: bigint
+        nullable: true
+      milestone__node_id:
+        data_type: text
+        nullable: true
+      milestone__number:
+        data_type: bigint
+        nullable: true
+      milestone__title:
+        data_type: text
+        nullable: true
+      milestone__creator__login:
+        data_type: text
+        nullable: true
+      milestone__creator__id:
+        data_type: bigint
+        nullable: true
+      milestone__creator__node_id:
+        data_type: text
+        nullable: true
+      milestone__creator__avatar_url:
+        data_type: text
+        nullable: true
+      milestone__creator__gravatar_id:
+        data_type: text
+        nullable: true
+      milestone__creator__url:
+        data_type: text
+        nullable: true
+      milestone__creator__html_url:
+        data_type: text
+        nullable: true
+      milestone__creator__followers_url:
+        data_type: text
+        nullable: true
+      milestone__creator__following_url:
+        data_type: text
+        nullable: true
+      milestone__creator__gists_url:
+        data_type: text
+        nullable: true
+      milestone__creator__starred_url:
+        data_type: text
+        nullable: true
+      milestone__creator__subscriptions_url:
+        data_type: text
+        nullable: true
+      milestone__creator__organizations_url:
+        data_type: text
+        nullable: true
+      milestone__creator__repos_url:
+        data_type: text
+        nullable: true
+      milestone__creator__events_url:
+        data_type: text
+        nullable: true
+      milestone__creator__received_events_url:
+        data_type: text
+        nullable: true
+      milestone__creator__type:
+        data_type: text
+        nullable: true
+      milestone__creator__user_view_type:
+        data_type: text
+        nullable: true
+      milestone__creator__site_admin:
+        data_type: bool
+        nullable: true
+      milestone__open_issues:
+        data_type: bigint
+        nullable: true
+      milestone__closed_issues:
+        data_type: bigint
+        nullable: true
+      milestone__state:
+        data_type: text
+        nullable: true
+      milestone__created_at:
+        data_type: timestamp
+        nullable: true
+      milestone__updated_at:
+        data_type: timestamp
+        nullable: true
+      milestone__due_on:
+        data_type: timestamp
+        nullable: true
+      milestone__closed_at:
+        nullable: true
+        x-normalizer:
+          seen-null-first: true
+      pull_request__merged_at:
+        nullable: true
+        data_type: timestamp
+      parent_issue_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__id:
+        data_type: bigint
+        nullable: true
+      performed_via_github_app__client_id:
+        data_type: text
+        nullable: true
+      performed_via_github_app__slug:
+        data_type: text
+        nullable: true
+      performed_via_github_app__node_id:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__login:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__id:
+        data_type: bigint
+        nullable: true
+      performed_via_github_app__owner__node_id:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__avatar_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__gravatar_id:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__html_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__followers_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__following_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__gists_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__starred_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__subscriptions_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__organizations_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__repos_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__events_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__received_events_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__type:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__user_view_type:
+        data_type: text
+        nullable: true
+      performed_via_github_app__owner__site_admin:
+        data_type: bool
+        nullable: true
+      performed_via_github_app__name:
+        data_type: text
+        nullable: true
+      performed_via_github_app__description:
+        data_type: text
+        nullable: true
+      performed_via_github_app__external_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__html_url:
+        data_type: text
+        nullable: true
+      performed_via_github_app__created_at:
+        data_type: timestamp
+        nullable: true
+      performed_via_github_app__updated_at:
+        data_type: timestamp
+        nullable: true
+      performed_via_github_app__permissions__actions:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__checks:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__codespaces:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__codespaces_secrets:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__codespaces_user_secrets:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__contents:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__deployments:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__discussions:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__issues:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__metadata:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__packages:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__pages:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__pull_requests:
+        data_type: text
+        nullable: true
+      performed_via_github_app__perr90tjaequests_comment_only_reviews:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__pull_requests_from_forks:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__repository_projects:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__statuses:
+        data_type: text
+        nullable: true
+      performed_via_github_app__permissions__workflows:
+        data_type: text
+        nullable: true
+      milestone__description:
+        nullable: true
+        data_type: text
+      type__id:
+        data_type: bigint
+        nullable: true
+      type__node_id:
+        data_type: text
+        nullable: true
+      type__name:
+        data_type: text
+        nullable: true
+      type__description:
+        data_type: text
+        nullable: true
+      type__color:
+        data_type: text
+        nullable: true
+      type__created_at:
+        data_type: timestamp
+        nullable: true
+      type__updated_at:
+        data_type: timestamp
+        nullable: true
+      type__is_enabled:
+        data_type: bool
+        nullable: true
+    write_disposition: merge
+    resource: issues
+    x-normalizer:
+      seen-data: true
+  _dlt_pipeline_state:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+      engine_version:
+        data_type: bigint
+        nullable: false
+      pipeline_name:
+        data_type: text
+        nullable: false
+      state:
+        data_type: text
+        nullable: false
+      created_at:
+        data_type: timestamp
+        nullable: false
+      version_hash:
+        data_type: text
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    file_format: preferred
+    resource: _dlt_pipeline_state
+    x-normalizer:
+      seen-data: true
+  issues__labels:
+    columns:
+      id:
+        data_type: bigint
+        nullable: true
+      node_id:
+        data_type: text
+        nullable: true
+      url:
+        data_type: text
+        nullable: true
+      name:
+        data_type: text
+        nullable: true
+      color:
+        data_type: text
+        nullable: true
+      default:
+        data_type: bool
+        nullable: true
+      description:
+        data_type: text
+        nullable: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: issues
+    x-normalizer:
+      seen-data: true
+  issues__assignees:
+    columns:
+      login:
+        data_type: text
+        nullable: true
+      id:
+        data_type: bigint
+        nullable: true
+      node_id:
+        data_type: text
+        nullable: true
+      avatar_url:
+        data_type: text
+        nullable: true
+      gravatar_id:
+        data_type: text
+        nullable: true
+      url:
+        data_type: text
+        nullable: true
+      html_url:
+        data_type: text
+        nullable: true
+      followers_url:
+        data_type: text
+        nullable: true
+      following_url:
+        data_type: text
+        nullable: true
+      gists_url:
+        data_type: text
+        nullable: true
+      starred_url:
+        data_type: text
+        nullable: true
+      subscriptions_url:
+        data_type: text
+        nullable: true
+      organizations_url:
+        data_type: text
+        nullable: true
+      repos_url:
+        data_type: text
+        nullable: true
+      events_url:
+        data_type: text
+        nullable: true
+      received_events_url:
+        data_type: text
+        nullable: true
+      type:
+        data_type: text
+        nullable: true
+      user_view_type:
+        data_type: text
+        nullable: true
+      site_admin:
+        data_type: bool
+        nullable: true
+      _dlt_root_id:
+        data_type: text
+        nullable: false
+        root_key: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: issues
+    x-normalizer:
+      seen-data: true
+settings:
+  detections:
+  - iso_timestamp
+  default_hints:
+    not_null:
+    - _dlt_id
+    - _dlt_root_id
+    - _dlt_parent_id
+    - _dlt_list_idx
+    - _dlt_load_id
+    parent_key:
+    - _dlt_parent_id
+    root_key:
+    - _dlt_root_id
+    unique:
+    - _dlt_id
+    row_key:
+    - _dlt_id
+normalizers:
+  names: snake_case
+  json:
+    module: dlt.common.normalizers.json.relational
+    config:
+      propagation:
+        tables:
+          issues:
+            _dlt_id: _dlt_root_id
+previous_hashes:
+- lZ944+Kr+C8Vi9ON2oTCpMkbfpKobHsfBRQqQDJlP5k=
+- HZaqKinjoGQJA7UHhrGk6e3eSOaNs0NFu6kd6swkxCc=

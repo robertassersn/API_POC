@@ -130,8 +130,15 @@ import requests
 def requests_get_page(
     base_url
     , params
+    , headers = None
     , timeout = 30
     ) -> dict:
-    response = requests.get(base_url, params=params, timeout=30)
+
+    response = requests.get(
+        base_url
+        , params=params
+        , headers = headers
+        , timeout=30
+    )
     response.raise_for_status()
     return response
