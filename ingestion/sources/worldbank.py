@@ -9,7 +9,7 @@ from pathlib import Path
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from project_files import functions
-from ingestion.config.base_config import requests_get_page
+from ingestion.ingestion_functions.general_functions import requests_get_page
 
 os.environ["RUNTIME__LOG_LEVEL"] = "INFO"
 DATASOURCE = 'WORLD_BANK'

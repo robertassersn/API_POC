@@ -7,7 +7,7 @@ base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from project_files import functions
 from ingestion.sources.carvago import carvago_source
-from ingestion.config.base_config import run_dlt_pipeline
+from ingestion.ingestion_functions.general_functions import run_dlt_pipeline
 os.environ["RUNTIME__LOG_LEVEL"] = "INFO"  # set before pipeline creation
 DATASOURCE = 'CARVAGO'
 PIPELINE_NAME = 'carvago_to_filesystem'

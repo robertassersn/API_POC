@@ -120,49 +120,7 @@ def run_dlt_pipeline(
     _run()
 
 
-import time
 import requests
-
-RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
-
-def fetch_with_retries(url, params, timeout=60, max_retries=5):
-    attempt = 0
-
-    while True:
-        try:
-            response = requests.get(url, params=params, timeout=timeout)
-
-            # If status is OK, return immediately
-            if response.status_code < 400:
-                return response
-
-            # If status requires waiting
-            if response.status_code in RETRY_STATUS_CODES:
-                attempt += 1
-                if attempt > max_retries:
-                    response.raise_for_status()
-
-                # Respect Retry-After header if present
-                retry_after = response.headers.get("Retry-After")
-                if retry_after:
-                    wait = int(retry_after)
-                else:
-                    wait = min(2 ** attempt, 60)  # exponential backoff capped at 60s
-
-                time.sleep(wait)
-                continue
-
-            # Other errors: raise immediately
-            response.raise_for_status()
-
-        except (requests.exceptions.Timeout,
-                requests.exceptions.ConnectionError) as e:
-            attempt += 1
-            if attempt > max_retries:
-                raise
-
-            wait = min(2 ** attempt, 60)
-            time.sleep(wait)
 
 @tenacity.retry(
     stop=stop_after_attempt(2),

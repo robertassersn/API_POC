@@ -1,7 +1,6 @@
 """Google Trends specific configuration."""
 import os
 import sys
-
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 
@@ -9,15 +8,14 @@ from project_files import functions
 
 _config = None
 
-SCHEMA_CONTRACT = {
-    "tables": "freeze",
-    "columns": "evolve",
-    "data_type": "freeze"
-}
+# SCHEMA_CONTRACT = {
+#     "tables": "freeze",
+#     "columns": "evolve",
+#     "data_type": "freeze"
+# }
 
 
 def get_config() -> dict:
-    """Get Google Trends config (cached)."""
     global _config
     if _config is None:
         _config = functions.read_config_segment(segment='GOOGLE_TRENDS')
