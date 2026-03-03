@@ -26,7 +26,6 @@ from project_files import functions
 
 os.environ["RUNTIME__LOG_LEVEL"] = "INFO"  # set before pipeline creation
 DATASOURCE = 'CARVAGO'
-PIPELINE_NAME = 'carvago_to_filesystem'
 config_dictionary = functions.read_config_segment(segment=DATASOURCE)
 
 @dlt.source
