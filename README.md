@@ -116,9 +116,8 @@ Generated output files example
 
 - Library supports creating table's on its own. Meaning with enough permissions it can create schema + tables required to insert data
 <img width="810" height="490" alt="image" src="https://github.com/user-attachments/assets/613eb827-4441-4850-8691-2735b752f310" />
-</details>
 
 - Support for incremental loadings, bookmarks are stored in .dlt/pipelines/${pipeline_name} directory
 <img width="1095" height="534" alt="image" src="https://github.com/user-attachments/assets/6fc32981-41ed-4e0c-bbb2-c2b66ff8196a" />
-
+</details>
 
