@@ -7,10 +7,15 @@ from typing import Iterator
 import os,sys
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
-from ingestion.config.google_trends_config import construct_date_range, SCHEMA_CONTRACT
+from ingestion.ingestion_functions.google_trends_functions import construct_date_range
 
 logger = logging.getLogger(__name__)
 
+SCHEMA_CONTRACT = {
+    "tables": "freeze",
+    "columns": "evolve",
+    "data_type": "freeze"
+}
 
 def fetch_with_retry(params: dict, max_retries: int = 3, delay: int = 5) -> dict:
     """Fetch from SerpAPI with retry logic."""

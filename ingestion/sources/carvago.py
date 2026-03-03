@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
-from ingestion.config.base_config import requests_get_page
+from ingestion.ingestion_functions.general_functions import requests_get_page
 from project_files import functions
 # from tenacity import wait_fixed,retry,stop_after_attempt
 # https://api.carvago.com/api/listedcars?country[]=32

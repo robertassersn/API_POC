@@ -8,9 +8,8 @@ logger = logging.getLogger(__name__)
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from ingestion.sources.filesystem import filesystem_source
-from ingestion.config.base_config import get_pg_credentials
 from project_files import functions
-from ingestion.config.base_config import run_dlt_pipeline
+from ingestion.ingestion_functions.general_functions import run_dlt_pipeline,get_pg_credentials
 
 destination=dlt.destinations.postgres(credentials=get_pg_credentials())
 DATASOURCE = 'FILESYSTEM'
