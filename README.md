@@ -12,9 +12,9 @@ When data is received from datasource DLT framework takes care of normalization 
 ### Examples
 **ingestion pipelines can be found at**: /ingestion/pipelines/
 
-**carvago_to_filesystem_example.py** provides example how to load files into filesystem
+**worldbank_to_filesystem.py** provides example how to load files into filesystem
 
-**carvago_to_postgresql_example.py** provides examples how to load files into database (in current example Postgresql)
+**github_to_postgresql_incremental_example.py** provides examples how to load files into database (in current example Postgresql)
 
 **filesystem_to_postgresql.py** provides examples how to load from filesystem into database
 
