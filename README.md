@@ -55,7 +55,8 @@ https://dlthub.com/docs/general-usage/schema-contracts
 <details>
 <summary>RAW response example</summary>
   
-<img width="1273" height="224" alt="image" src="https://github.com/user-attachments/assets/08efb8ad-af07-4ee3-9ef8-e0caa66a5b51" />
+<img width="1419" height="603" alt="image" src="https://github.com/user-attachments/assets/d895050a-7acb-4153-8298-86afbd4e68bc" />
+
 
 </details>
 
