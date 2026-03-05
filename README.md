@@ -18,7 +18,7 @@ When data is received from datasource DLT framework takes care of normalization 
 
 **filesystem_to_postgresql.py** provides examples how to load from filesystem into database
 
-**/ingestion/sources/worldbank.py** example of datasource that yields .xml and library handles it
+**/ingestion/sources/worldbank.py** example of datasource that yields .xml and how to pass it to DLT
 
 ### Additional information
 
